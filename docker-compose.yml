@@ -1,0 +1,57 @@
+version: "2"
+
+services:
+
+  samba:
+    image: dperson/samba:rpi
+    restart: always
+    command: '-u "pi;Raspberry" -s "media;/media;yes;no;no"'
+    stdin_open: true
+    tty: true
+    ports:
+      - 139:130
+      - 445:445
+    volumes:
+      - /usr/share/zoneinfo/America/Mexico_City:/etc/localtime
+      - /media:/media
+
+  transmission:
+    image : jaymoulin/transmission
+    command: transmission-daemon -f -g /config
+    volumes:
+      - ./transmission:/config
+      - /media/usbDisk/torrents:/downloads
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    expose:
+      - 9091
+    restart: unless-stopped
+
+  jdownloader:
+    image: jaymoulin/jdownloader
+    container_name: jdownloader
+    restart: always
+    user: 1000:100
+    volumes:
+        - /home/pi/config/jdownloader:/opt/JDownloader/app/cfg
+        - /media/usbDisk/jdownloader:/opt/JDownloader/Downloads
+        - /media/usbDisk/jdownloader/logs:/opt/JDownloader/logs
+    environment: 
+            MYJD_USER: escamilla.cristian@gmail.com
+            MYJD_PASSWORD: bapho666
+            MYJD_DEVICE_NAME: jdownloader_rpi_docker
+            XDG_DOWNLOAD_DIR: /opt/JDownloader/Downloads
+    ports:
+        - 3129:3129
+
+
+  portainer:
+    image: portainer/portainer-ce:linux-arm
+    container_name: portainer
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 9000:9000
