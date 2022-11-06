@@ -1,0 +1,11 @@
+media/*
+plex/*
+.bash*
+.profile*
+.ssh*
+.vim*
+downloads/*
+.gitconfig
+*.log
+.DS_Store
+.env

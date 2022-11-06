@@ -35,7 +35,7 @@ services:
     restart: always
     user: 1000:100
     volumes:
-        - /home/pi/config/jdownloader:/opt/JDownloader/app/cfg
+        - /media/usbDisk/jdownloader/cfg:/opt/JDownloader/app/cfg
         - /media/usbDisk/jdownloader:/opt/JDownloader/Downloads
         - /media/usbDisk/jdownloader/logs:/opt/JDownloader/logs
     environment: 
@@ -45,13 +45,14 @@ services:
             XDG_DOWNLOAD_DIR: /opt/JDownloader/Downloads
     ports:
         - 3129:3129
-
-
+  
+  
   portainer:
     image: portainer/portainer-ce:linux-arm
     container_name: portainer
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - /media/usbDisk/portainer_data:/data
     ports:
       - 9000:9000
