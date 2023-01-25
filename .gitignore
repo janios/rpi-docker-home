@@ -11,3 +11,4 @@ downloads/*
 .env
 
 transmission/*
+transmission/
