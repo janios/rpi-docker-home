@@ -12,3 +12,4 @@ downloads/*
 
 transmission/*
 transmission/
+transmission/stats.json
