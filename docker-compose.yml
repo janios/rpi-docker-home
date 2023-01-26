@@ -68,3 +68,18 @@ services:
       - ${MEDIA_MOUNTING_POINT}/plex-media:/media
       - ${MEDIA_MOUNTING_POINT}/plex-tmp:/tmp
     restart: always
+
+  flexget:
+    image: wiserain/flexget:3.3.39
+    volumes:
+      - ./flexget:/config
+      - ${MEDIA_MOUNTING_POINT}/torrents/complete:/downloads
+      - ${MEDIA_MOUNTING_POINT}/plex-media:/storage
+    ports:
+      - 5050:5050
+    environment:
+      - TORRENT_PLUGIN=transmission
+      - FG_WEBUI_PASSWD=raspberry
+    restart: unless-stopped
+    links:
+      - transmission

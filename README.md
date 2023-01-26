@@ -80,6 +80,11 @@ cargar contenedores
 sudo docker-compose up -d
 ```
 
+***
+configurar plex
 
+entrar a 
 
-
+```
+127.0.0.1:32400/web/index.html
+```
