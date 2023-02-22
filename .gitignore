@@ -13,3 +13,9 @@ downloads/*
 transmission/*
 transmission/
 transmission/stats.json
+flexget/db-config.sqlite
+.gitignore
+flexget/custom-con*
+transmission/settings.json
+transmission/stats.json
+transmission/dht.dat

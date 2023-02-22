@@ -5,6 +5,17 @@ Repo utilizado para configurar servidores en raspberry pi
 Seguir los siguiente pasos
 
 1.- Configurar ip fija
+
+```
+sudo nano /etc/dhcpcd.conf
+```
+```
+interface eth0
+static ip_address=192.168.3.30/24
+static routers=192.168.3.1
+static domain_name_servers=192.168.3.1 8.8.8.8 
+```
+
 ***
 2.- Montar disco duro
 2.1 obtener uuid de unidad

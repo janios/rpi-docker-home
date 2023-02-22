@@ -3,7 +3,7 @@ web_server: yes
 schedules:
   - tasks: '*'
     interval:
-      minutes: 30
+      minutes: 10
 
 templates:
   tv:
@@ -37,21 +37,17 @@ templates:
     transmission:
       host: transmission
       port: 9091
-      username: admin
-      password: "123456"
+      username: pi
+      password: "Raspberry"
 
 tasks:
-  eztvrss:
-    rss: https://eztv.ag/ezrss.xml
-    template: tv
-    priority: 2
   sort_tv:
     priority: 2
     no_entries_ok: yes
     parsing:
       series: guessit
     filesystem:
-      path: /downloads/complete
+      path: /downloads
       regexp: '.*\.(avi|mkv|mp4)$'
       recursive: yes
     accept_all: yes
@@ -72,7 +68,7 @@ tasks:
     priority: 2
     no_entries_ok: yes
     filesystem:
-      path: /downloads/complete
+      path: /downloads
       regexp: '.*\.(avi|mkv|mp4)$'
       recursive: yes
     accept_all: yes
@@ -81,7 +77,7 @@ tasks:
     exec:
       auto_escape: yes
       on_output:
-       for_entries: |
+       for_entries: 
          if mediainfo "{{ location }}" | grep EAC3; then
            mkdir -p "/storage/pelis/{{ movie_name }} ({{ movie_year }})" && ffmpeg -hwaccel auto -y -i "{{ location }}" -map 0 -c:s copy -c:v copy -c:a ac3 -b:a 640k "/storage/pelis/{{ movie_name }} ({{ movie_year }})/{{ movie_name }} ({{ movie_year }}){{ location | pathext }}"
          else
@@ -91,8 +87,8 @@ tasks:
     from_transmission:
       host: transmission
       port: 9091
-      username: admin
-      password: "123456"
+      username: pi
+      password: Raspberry
     disable: [seen, seen_info_hash]
     if:
       - transmission_progress == 100: accept

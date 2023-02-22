@@ -1,7 +1,6 @@
 version: "2"
 
 services:
-
   samba:
     image: dperson/samba:rpi
     restart: always
@@ -29,22 +28,22 @@ services:
       - 9091
     restart: unless-stopped
 
-  jdownloader:
-    image: jaymoulin/jdownloader
-    container_name: jdownloader
-    restart: always
-    user: 1000:100
-    volumes:
-        - ${MEDIA_MOUNTING_POINT}/jdownloader/cfg:/opt/JDownloader/app/cfg
-        - ${MEDIA_MOUNTING_POINT}/jdownloader:/opt/JDownloader/Downloads
-        - ${MEDIA_MOUNTING_POINT}/jdownloader/logs:/opt/JDownloader/logs
-    environment: 
-            MYJD_USER: ${JDOWNLOADER_USER}
-            MYJD_PASSWORD: ${JDOWNLOADER_PASS}
-            MYJD_DEVICE_NAME: jdownloader_rpi_docker
-            XDG_DOWNLOAD_DIR: /opt/JDownloader/Downloads
-    ports:
-        - 3129:3129
+  #jdownloader:
+  #  image: jaymoulin/jdownloader:2.1.0-armhf
+  #  container_name: jdownloader
+  #  restart: always
+  #  user: 1001:100
+  #  volumes:
+  #      - ${MEDIA_MOUNTING_POINT}/jdownloader/cfg:/opt/JDownloader/app/cfg
+  #      - ${MEDIA_MOUNTING_POINT}/jdownloader:/opt/JDownloader/Downloads
+  #      - ${MEDIA_MOUNTING_POINT}/jdownloader/logs:/opt/JDownloader/logs
+  #  environment: 
+  #          MYJD_USER: ${JDOWNLOADER_USER}
+  #          MYJD_PASSWORD: ${JDOWNLOADER_PASS}
+  #         MYJD_DEVICE_NAME: jdownloader_rpi_docker
+  #          XDG_DOWNLOAD_DIR: /opt/JDownloader/Downloads
+  #  ports:
+  #      - 3129:3129
   
   
   portainer:
@@ -69,17 +68,17 @@ services:
       - ${MEDIA_MOUNTING_POINT}/plex-tmp:/tmp
     restart: always
 
-  flexget:
-    image: wiserain/flexget:3.3.39
-    volumes:
-      - ./flexget:/config
-      - ${MEDIA_MOUNTING_POINT}/torrents/complete:/downloads
-      - ${MEDIA_MOUNTING_POINT}/plex-media:/storage
-    ports:
-      - 5050:5050
-    environment:
-      - TORRENT_PLUGIN=transmission
-      - FG_WEBUI_PASSWD=raspberry
-    restart: unless-stopped
-    links:
-      - transmission
+  #flexget:
+  #  image: wiserain/flexget:3.5
+  #  volumes:
+  #    - ./flexget:/config
+  #    - ${MEDIA_MOUNTING_POINT}/torrents/complete:/downloads
+  #    - ${MEDIA_MOUNTING_POINT}/plex-media:/storage
+  #  ports:
+  #    - 5050:5050
+  #  environment:
+  #    - TORRENT_PLUGIN=transmission
+  #    - FG_WEBUI_PASSWD=raspberry
+  #  restart: unless-stopped
+  #  links:
+  #    - transmission
