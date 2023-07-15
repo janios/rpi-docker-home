@@ -72,7 +72,7 @@ tasks:
     priority: 2
     no_entries_ok: yes
     filesystem:
-      path: /downloads
+      path: /downloads/
       regexp: '.*\.(avi|mkv|mp4)$'
       recursive: yes
     accept_all: yes
@@ -101,6 +101,6 @@ tasks:
     transmission:
       host: transmission
       port: 9091
-      username: admin
+      username: pi
       password: Raspberry
       action: purge
