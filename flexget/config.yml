@@ -41,13 +41,17 @@ templates:
       password: "Raspberry"
 
 tasks:
+  eztvrss:
+    rss: https://eztv.ag/ezrss.xml
+    template: tv
+    priority: 2
   sort_tv:
     priority: 2
     no_entries_ok: yes
     parsing:
       series: guessit
     filesystem:
-      path: /downloads
+      path: /downloads/
       regexp: '.*\.(avi|mkv|mp4)$'
       recursive: yes
     accept_all: yes
@@ -98,5 +102,5 @@ tasks:
       host: transmission
       port: 9091
       username: admin
-      password: "123456"
+      password: Raspberry
       action: purge

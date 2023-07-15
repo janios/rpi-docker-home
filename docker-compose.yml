@@ -7,15 +7,16 @@ services:
     command: '-u "pi;Raspberry" -s "media;/media;yes;no;no"'
     stdin_open: true
     tty: true
+    environment:
+      - TZ=America/Mexico_City
     ports:
       - 139:130
       - 445:445
     volumes:
-      - /usr/share/zoneinfo/America/Mexico_City:/etc/localtime
       - ${MEDIA_MOUNTING_POINT}:/media
 
   transmission:
-    image : jaymoulin/transmission
+    image : jaymoulin/transmission:3.00-1.6.1
     command: transmission-daemon -f -g /config
     volumes:
       - ./transmission:/config
@@ -57,28 +58,32 @@ services:
       - 9000:9000
 
   plex:
-    image: jaymoulin/plex:1.25.2.5319-armhf
+    image: jaymoulin/plex:1.30.1.6562
     ports:
       - 32400:32400
-      - 33400:32400
+      - 33400:33400
+    hostname: plex
     network_mode: "host"
+    environment:
+      - TZ=America/Mexico_City
     volumes:
       - ${MEDIA_MOUNTING_POINT}/plex:/root/Library/Application Support/Plex Media Server
       - ${MEDIA_MOUNTING_POINT}/plex-media:/media
       - ${MEDIA_MOUNTING_POINT}/plex-tmp:/tmp
     restart: always
 
-  #flexget:
-  #  image: wiserain/flexget:3.5
-  #  volumes:
-  #    - ./flexget:/config
-  #    - ${MEDIA_MOUNTING_POINT}/torrents/complete:/downloads
-  #    - ${MEDIA_MOUNTING_POINT}/plex-media:/storage
-  #  ports:
-  #    - 5050:5050
-  #  environment:
-  #    - TORRENT_PLUGIN=transmission
-  #    - FG_WEBUI_PASSWD=raspberry
-  #  restart: unless-stopped
-  #  links:
-  #    - transmission
+  flexget:
+    image: wiserain/flexget:3.5
+    volumes:
+      - ./flexget:/config
+      - ${MEDIA_MOUNTING_POINT}/torrents/complete:/downloads
+      - ${MEDIA_MOUNTING_POINT}/plex-media:/storage
+      - ./flexget/custom-cont-init.d:/custom-cont-init.d
+    ports:
+      - 5050:5050
+    environment:
+      - TORRENT_PLUGIN=transmission
+      - FG_WEBUI_PASSWD=raspberry1981!
+    restart: unless-stopped
+    links:
+      - transmission
