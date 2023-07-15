@@ -19,3 +19,4 @@ flexget/custom-con*
 transmission/settings.json
 transmission/stats.json
 transmission/dht.dat
+flexget/db-config-jobs.sqlite
