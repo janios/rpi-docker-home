@@ -1,22 +1,22 @@
 version: "2"
 
 services:
-
   samba:
     image: dperson/samba:rpi
     restart: always
     command: '-u "pi;Raspberry" -s "media;/media;yes;no;no"'
     stdin_open: true
     tty: true
+    environment:
+      - TZ=America/Mexico_City
     ports:
       - 139:130
       - 445:445
     volumes:
-      - /usr/share/zoneinfo/America/Mexico_City:/etc/localtime
       - ${MEDIA_MOUNTING_POINT}:/media
 
   transmission:
-    image : jaymoulin/transmission
+    image : jaymoulin/transmission:3.00-1.6.1
     command: transmission-daemon -f -g /config
     volumes:
       - ./transmission:/config
@@ -29,22 +29,22 @@ services:
       - 9091
     restart: unless-stopped
 
-  jdownloader:
-    image: jaymoulin/jdownloader
-    container_name: jdownloader
-    restart: always
-    user: 1000:100
-    volumes:
-        - ${MEDIA_MOUNTING_POINT}/jdownloader/cfg:/opt/JDownloader/app/cfg
-        - ${MEDIA_MOUNTING_POINT}/jdownloader:/opt/JDownloader/Downloads
-        - ${MEDIA_MOUNTING_POINT}/jdownloader/logs:/opt/JDownloader/logs
-    environment: 
-            MYJD_USER: ${JDOWNLOADER_USER}
-            MYJD_PASSWORD: ${JDOWNLOADER_PASS}
-            MYJD_DEVICE_NAME: jdownloader_rpi_docker
-            XDG_DOWNLOAD_DIR: /opt/JDownloader/Downloads
-    ports:
-        - 3129:3129
+  #jdownloader:
+  #  image: jaymoulin/jdownloader:2.1.0-armhf
+  #  container_name: jdownloader
+  #  restart: always
+  #  user: 1001:100
+  #  volumes:
+  #      - ${MEDIA_MOUNTING_POINT}/jdownloader/cfg:/opt/JDownloader/app/cfg
+  #      - ${MEDIA_MOUNTING_POINT}/jdownloader:/opt/JDownloader/Downloads
+  #      - ${MEDIA_MOUNTING_POINT}/jdownloader/logs:/opt/JDownloader/logs
+  #  environment: 
+  #          MYJD_USER: ${JDOWNLOADER_USER}
+  #          MYJD_PASSWORD: ${JDOWNLOADER_PASS}
+  #         MYJD_DEVICE_NAME: jdownloader_rpi_docker
+  #          XDG_DOWNLOAD_DIR: /opt/JDownloader/Downloads
+  #  ports:
+  #      - 3129:3129
   
   
   portainer:
@@ -58,13 +58,32 @@ services:
       - 9000:9000
 
   plex:
-    image: jaymoulin/plex:1.25.2.5319-armhf
+    image: jaymoulin/plex:1.30.1.6562
     ports:
       - 32400:32400
-      - 33400:32400
+      - 33400:33400
+    hostname: plex
     network_mode: "host"
+    environment:
+      - TZ=America/Mexico_City
     volumes:
       - ${MEDIA_MOUNTING_POINT}/plex:/root/Library/Application Support/Plex Media Server
       - ${MEDIA_MOUNTING_POINT}/plex-media:/media
       - ${MEDIA_MOUNTING_POINT}/plex-tmp:/tmp
     restart: always
+
+  flexget:
+    image: wiserain/flexget:3.5
+    volumes:
+      - ./flexget:/config
+      - ${MEDIA_MOUNTING_POINT}/torrents/complete:/downloads
+      - ${MEDIA_MOUNTING_POINT}/plex-media:/storage
+      - ./flexget/custom-cont-init.d:/custom-cont-init.d
+    ports:
+      - 5050:5050
+    environment:
+      - TORRENT_PLUGIN=transmission
+      - FG_WEBUI_PASSWD=raspberry1981!
+    restart: unless-stopped
+    links:
+      - transmission
