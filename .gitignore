@@ -20,3 +20,8 @@ transmission/settings.json
 transmission/stats.json
 transmission/dht.dat
 flexget/db-config-jobs.sqlite
+flexget/.config-lock
+flexget/.config-lock
+flexget/db-config-jobs.sqlite
+transmission/settings.json
+transmission/stats.json

@@ -82,17 +82,13 @@ tasks:
       auto_escape: yes
       on_output:
        for_entries: 
-         if mediainfo "{{ location }}" | grep EAC3; then
-           mkdir -p "/storage/pelis/{{ movie_name }} ({{ movie_year }})" && ffmpeg -hwaccel auto -y -i "{{ location }}" -map 0 -c:s copy -c:v copy -c:a ac3 -b:a 640k "/storage/pelis/{{ movie_name }} ({{ movie_year }})/{{ movie_name }} ({{ movie_year }}){{ location | pathext }}"
-         else
-           mkdir -p "/storage/pelis/{{ movie_name }} ({{ movie_year }})" && cp "{{ location }}" "/storage/pelis/{{ movie_name }} ({{ movie_year }})/{{ movie_name }} ({{ movie_year }}){{ location | pathext }}"
-         fi
+         mkdir -p "/storage/pelis/{{ movie_name }} ({{ movie_year }})" && cp "{{ location }}" "/storage/pelis/{{ movie_name }} ({{ movie_year }})/{{ movie_name }} ({{ movie_year }}){{ location | pathext }}"
   remove_stale_torrents:
     from_transmission:
       host: transmission
-      port: 9091
+      port: 9091 
       username: pi
-      password: Raspberry
+      password: "Raspberry"
     disable: [seen, seen_info_hash]
     if:
       - transmission_progress == 100: accept
@@ -102,5 +98,5 @@ tasks:
       host: transmission
       port: 9091
       username: pi
-      password: Raspberry
+      password: "Raspberry"
       action: purge
