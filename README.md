@@ -99,3 +99,12 @@ entrar a
 ```
 127.0.0.1:32400/web/index.html
 ```
+
+
+para ejecutar jdownloader es necesario dar permisos de escritura, y cambiar usuarios a las carpetas de jdownloader
+con 
+
+
+```
+chmod y chown
+```
