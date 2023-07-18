@@ -1,0 +1,65 @@
+version: "2"
+
+services:
+
+  samba:
+    image: dperson/samba:rpi
+    restart: always
+    command: '-u "pi;Raspberry" -s "media;/media;yes;no;no"'
+    stdin_open: true
+    tty: true
+    ports:
+      - 139:130
+      - 445:445
+    volumes:
+      - /usr/share/zoneinfo/America/Mexico_City:/etc/localtime
+      - ${MEDIA_MOUNTING_POINT}:/media
+
+  transmission:
+    image : jaymoulin/transmission
+    command: transmission-daemon -f -g /config
+    volumes:
+      - ./transmission:/config
+      - ${MEDIA_MOUNTING_POINT}/torrents:/downloads
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    expose:
+      - 9091
+    restart: unless-stopped
+
+  jdownloader:
+    image: jaymoulin/jdownloader
+    container_name: jdownloader
+    restart: always
+    user: 1000:100
+    volumes:
+        - ${MEDIA_MOUNTING_POINT}/jdownloader/cfg:/opt/JDownloader/app/cfg
+        - ${MEDIA_MOUNTING_POINT}/jdownloader:/opt/JDownloader/Downloads
+        - ${MEDIA_MOUNTING_POINT}/jdownloader/logs:/opt/JDownloader/logs
+    environment: 
+            MYJD_USER: ${JDOWNLOADER_USER}
+            MYJD_PASSWORD: ${JDOWNLOADER_PASS}
+            MYJD_DEVICE_NAME: jdownloader_rpi_docker
+            XDG_DOWNLOAD_DIR: /opt/JDownloader/Downloads
+    ports:
+        - 3129:3129
+  
+  
+  portainer:
+    image: portainer/portainer-ce:linux-arm
+    container_name: portainer
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${MEDIA_MOUNTING_POINT}/portainer_data:/data
+    ports:
+      - 9000:9000
+
+   
+   xplex: image: linuxserver/plex 
+container_name: plex network_mode: host environment: - 
+PUID=1001 - PGID=1001 - VERSION=docker volumes: - 
+/docker/plex/library:/config - /media/plex/tvseries:/tv - 
+/media/plex/movies:/movies restart: always
