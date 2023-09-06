@@ -3,6 +3,7 @@ version: "2.1"
 services:
   samba:
     image: dperson/samba:rpi
+    container_name: samba
     restart: always
     command: '-u "pi;Raspberry" -s "media;/media;yes;no;no"'
     stdin_open: true
@@ -17,9 +18,10 @@ services:
 
   transmission:
     image : jaymoulin/transmission:3.00-1.6.1
+    container_name: transmission
     command: transmission-daemon -f -g /config
     volumes:
-      - ./transmission:/config
+      - ./transmission_config:/config
       - ${MEDIA_MOUNTING_POINT}/torrents:/downloads
     ports:
       - 9091:9091
@@ -45,20 +47,34 @@ services:
             XDG_DOWNLOAD_DIR: /opt/JDownloader/Downloads
     ports:
         - 3129:3129
-  
-  
+
+
+  kitana:
+    image: pannal/kitana:latest
+    container_name: kitana
+    volumes:
+      - ${MEDIA_MOUNTING_POINT}/kitana_data:/app/data
+    ports:
+      - 31337:31337
+    links:
+      - plex
+    command: -B 0.0.0.0:31337 -P
+    restart: unless-stopped 
+
+
   portainer:
     image: portainer/portainer-ce:linux-arm
     container_name: portainer
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${MEDIA_MOUNTING_POINT}/portainer_data:/data
+      - ${MEDIA_MOUNTING_POINT}/portainer_data_redo:/data
     ports:
       - 9000:9000
 
   plex:
-    image: jaymoulin/plex:1.30.1.6562
+    image: jaymoulin/plex:1.32.5.7349-armhf
+    container_name: plex
     ports:
       - 32400:32400
       - 33400:33400
@@ -74,6 +90,7 @@ services:
 
   flexget:
     image: wiserain/flexget:3.5
+    container_name: flexget
     volumes:
       - ./flexget:/config
       - ${MEDIA_MOUNTING_POINT}/torrents/complete:/downloads
@@ -87,3 +104,25 @@ services:
     restart: unless-stopped
     links:
       - transmission
+
+  homer:
+    image: b4bz/homer
+    #To build from source, comment previous line and uncomment below
+    #build: .
+    container_name: homer
+    volumes:
+      - ./hommer/assets/:/www/assets
+    ports:
+      - 8080:8080
+    environment:
+      - UID=1001 
+      - GDI=1001  
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=public
+      - traefik.http.routers.homer-secure.entrypoints=https
+      - traefik.http.routers.homer-secure.rule=Host(`home.example.org`)
+      - traefik.http.routers.homer-secure.tls=true
+      - traefik.http.routers.homer-secure.tls.certresolver=certlocal
+      - traefik.http.services.homer.loadbalancer.server.port=8080
+    restart: unless-stopped
