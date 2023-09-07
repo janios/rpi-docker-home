@@ -113,7 +113,7 @@ services:
     volumes:
       - ./hommer/assets/:/www/assets
     ports:
-      - 8080:8080
+      - 80:8080
     environment:
       - UID=1001 
       - GDI=1001  
@@ -126,3 +126,21 @@ services:
       - traefik.http.routers.homer-secure.tls.certresolver=certlocal
       - traefik.http.services.homer.loadbalancer.server.port=8080
     restart: unless-stopped
+
+  rpi-monitor:
+    image: michaelmiklis/rpi-monitor:latest
+    container_name: rpi-monitor
+    volumes:
+      - /opt/vc:/opt/vc
+      - /boot:/boot
+      - /sys:/dockerhost/sys:ro
+      - /etc:/dockerhost/etc:ro
+      - /proc:/dockerhost/proc:ro
+      - /usr/lib:/dockerhost/usr/lib:ro
+    devices:
+      - "/dev/vchiq:/dev/vchiq"  
+    restart: unless-stopped
+    ports:
+      - 8888:8888
+
+  
