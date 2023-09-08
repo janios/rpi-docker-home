@@ -2,8 +2,8 @@
 # Homepage configuration
 # See https://fontawesome.com/v5/search for icons options
 
-title: "Demo dashboard"
-subtitle: "Homer"
+title: "Rpi dashboard"
+subtitle: "Escamilla Mendiola"
 logo: "logo.png"
 # icon: "fas fa-skull-crossbones" # Optional icon
 
@@ -44,9 +44,9 @@ colors:
 message:
   #url: https://b4bz.io
   style: "is-dark" # See https://bulma.io/documentation/components/message/#colors for styling options.
-  title: "Demo !"
+  title: "Servidor Rpi !"
   icon: "fa fa-grin"
-  content: "This is a dummy homepage demo. <br /> Find more information on <a href='https://github.com/bastienwirtz/homer'>github.com/bastienwirtz/homer</a>"
+  content: "Servidor RPI"
 
 # Optional navbar
 # links: [] # Allows for navbar (dark mode, layout, and search) without any links
@@ -68,18 +68,37 @@ links:
 # First level array represent a group.
 # Leave only a "items" key if not using group (group name, icon & tagstyle are optional, section separation will not be displayed).
 services:
-  - name: "Applications"
+  - name: "Monitoreo"
+    icon: "fa-solid fa-screwdriver-wrench"
+    items:
+      - name: "Portainer"
+        logo: "assets/tools/sample.png"
+        subtitle: "docker config"
+        tag: "portainer"
+        keywords: "portainer"
+        url: "http://192.168.3.30:9000"
+        target: "_blank" # optional html a tag target attribute
+      - name: "rpi-monitoring"
+        logo: "assets/tools/sample2.png"
+        subtitle: "Rpi-monitoring"
+        tag: "rpi_monitoring"
+        url: "http://192.168.3.30:8888"
+  - name: "Servicios"
     icon: "fas fa-cloud"
     items:
-      - name: "Awesome app"
+      - name: "Plex"
         logo: "assets/tools/sample.png"
-        subtitle: "Bookmark example"
-        tag: "app"
-        keywords: "self hosted reddit"
-        url: "https://www.reddit.com/r/selfhosted/"
+        subtitle: "plex service"
+        tag: "plex"
+        keywords: "plex"
+        url: "http://192.168.3.30:32400/web/index.html#!/"
         target: "_blank" # optional html a tag target attribute
-      - name: "Another one"
-        logo: "assets/tools/sample2.png"
-        subtitle: "Another application"
-        tag: "app"
-        url: "#"
+      - name: "Transmission"
+        logo: "assets/tools/sample.png"
+        subtitle: "transmission"
+        tag: "plex"
+        keywords: "plex"
+        url: "http://192.168.3.30:9091"
+        target: "_blank" # optional html a tag target attribute 
+
+        
