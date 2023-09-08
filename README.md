@@ -92,12 +92,12 @@ sudo docker-compose up -d
 ```
 
 ***
-configurar plex
+Configurar servicios
 
 entrar a 
 
 ```
-127.0.0.1:32400/web/index.html
+192.168.3.30
 ```
 
 
