@@ -147,42 +147,6 @@ services:
     ports:
       - 8888:8888
 
-  db:
-    image: yobasystems/alpine-mariadb:latest
-    container_name: mariadb_nextcloud
-    restart: unless-stopped
-    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
-    expose:
-      - 3306
-    volumes:
-      - ${MEDIA_MOUNTING_POINT}/db:/var/lib/mysql
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Mexico_City
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASS}
-      - MYSQL_PASSWORD=${MYSQL_PASS}
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloud
-
-  nextcloud:
-    image: nextcloud
-    container_name: nextcloud
-    restart: unless-stopped
-    ports:
-      - "8081:80"
-      - "8443:443"
-    depends_on:
-      - db
-    volumes:
-      - ./nextcloud/config:/config 
-      - ${MEDIA_MOUNTING_POINT}/nextcloud/data:/data 
-    environment:
-      - MYSQL_PASSWORD=${MYSQL_PASS}
-      - MYSQL_DATABASE=nextcloud
-      - MYSQL_USER=nextcloud
-      - MYSQL_HOST=db
-
   filebrowser:
     image: hurlenko/filebrowser
     container_name: filebrowser
