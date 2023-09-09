@@ -181,5 +181,19 @@ services:
       - MYSQL_USER=nextcloud
       - MYSQL_HOST=db
 
+  filebrowser:
+    image: hurlenko/filebrowser
+    environment:
+      - UID=1000
+      - GID=1000
+      - TZ=Europe/Madrid
+      - FB_BASEURL=/filebrowser
+    ports:
+      - "8200:8080"
+    volumes:
+      - ${MEDIA_MOUNTING_POINT}/fb-data:/data
+      - ${MEDIA_MOUNTING_POINT}/fb-config:/config
+    restart: unless-stopped
+
 
   
