@@ -185,6 +185,7 @@ services:
 
   filebrowser:
     image: hurlenko/filebrowser
+    container_name: filebrowser
     environment:
       - UID=1000
       - GID=1000
