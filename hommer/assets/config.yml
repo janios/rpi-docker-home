@@ -111,6 +111,13 @@ services:
         tag: "File Browser"
         keywords: "file browser"
         url: "http://192.168.3.30:8081"
+        target: "_blank" # optional html a tag target attribute
+      - name: "Home Assistant"
+        logo: "assets/icons/homeassistant.svg"
+        subtitle: "Home Assistant"
+        tag: "Hole Assistant"
+        keywords: "Home Assistant"
+        url: "http://192.168.3.30:8123"
         target: "_blank" # optional html a tag target attribute 
 
         
