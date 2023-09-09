@@ -194,7 +194,7 @@ services:
     ports:
       - "8200:8080"
     volumes:
-      - ${MEDIA_MOUNTING_POINT}/fb-data:/data
+      - ${MEDIA_MOUNTING_POINT}:/data
       - ${MEDIA_MOUNTING_POINT}/fb-config:/config
     restart: unless-stopped
 
