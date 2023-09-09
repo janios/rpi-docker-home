@@ -87,7 +87,7 @@ services:
     icon: "fas fa-cloud"
     items:
       - name: "Plex"
-        logo: "assets/tools/sample.png"
+        logo: "assets/tools/transmission.png"
         subtitle: "plex service"
         tag: "plex"
         keywords: "plex"
