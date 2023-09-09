@@ -53,7 +53,7 @@ sudo mount -a
 
  ***
 
-Instalar Docer
+Instalar Docker
 
 
 ```
