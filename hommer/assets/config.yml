@@ -100,5 +100,12 @@ services:
         keywords: "plex"
         url: "http://192.168.3.30:9091"
         target: "_blank" # optional html a tag target attribute 
+      - name: "NextCloud"
+        logo: "assets/tools/sample.png"
+        subtitle: "NextCloud"
+        tag: "next_cloud"
+        keywords: "nextcloud"
+        url: "http://192.168.3.30:8081"
+        target: "_blank" # optional html a tag target attribute 
 
         

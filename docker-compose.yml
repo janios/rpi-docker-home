@@ -45,8 +45,8 @@ services:
         - ${MEDIA_MOUNTING_POINT}/jdownloader:/opt/JDownloader/Downloads
         - ${MEDIA_MOUNTING_POINT}/jdownloader/logs:/opt/JDownloader/logs
     environment: 
-            MYJD_USER: escamilla.cristian@gmail.com
-            MYJD_PASSWORD: bapho666
+            MYJD_USER: ${JDOWNLOADER_PASS}
+            MYJD_PASSWORD: ${JDOWNLOADER_USER}
             MYJD_DEVICE_NAME: jdownloader_rpi_docker
             XDG_DOWNLOAD_DIR: /opt/JDownloader/Downloads
     ports:
@@ -149,6 +149,7 @@ services:
 
   db:
     image: yobasystems/alpine-mariadb:latest
+    container_name: mariadb_nextcloud
     restart: unless-stopped
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     expose:
@@ -158,7 +159,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/Madrid           
+      - TZ=America/Mexico_City
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASS}
       - MYSQL_PASSWORD=${MYSQL_PASS}
       - MYSQL_DATABASE=nextcloud
@@ -166,6 +167,7 @@ services:
 
   nextcloud:
     image: nextcloud
+    container_name: nextcloud
     restart: unless-stopped
     ports:
       - "8081:80"
