@@ -156,7 +156,7 @@ services:
       - TZ=Europe/Madrid
       - FB_BASEURL=/filebrowser
     ports:
-      - "8200:8080"
+      - "8081:8080"
     volumes:
       - ${MEDIA_MOUNTING_POINT}:/data
       - ${MEDIA_MOUNTING_POINT}/fb-config:/config

@@ -72,14 +72,14 @@ services:
     icon: "fa-solid fa-screwdriver-wrench"
     items:
       - name: "Portainer"
-        logo: "assets/tools/sample.png"
+        logo: "assets/icons/portainer.png"
         subtitle: "docker config"
         tag: "portainer"
         keywords: "portainer"
         url: "http://192.168.3.30:9000"
         target: "_blank" # optional html a tag target attribute
       - name: "rpi-monitoring"
-        logo: "assets/tools/sample2.png"
+        logo: "assets/icons/rpi-monitor.png"
         subtitle: "Rpi-monitoring"
         tag: "rpi_monitoring"
         url: "http://192.168.3.30:8888"
@@ -94,17 +94,17 @@ services:
         url: "http://192.168.3.30:32400/web/index.html#!/"
         target: "_blank" # optional html a tag target attribute
       - name: "Transmission"
-        logo: "assets/tools/sample.png"
+        logo: "assets/icons/plex.png"
         subtitle: "transmission"
         tag: "plex"
         keywords: "plex"
         url: "http://192.168.3.30:9091"
         target: "_blank" # optional html a tag target attribute 
-      - name: "NextCloud"
-        logo: "assets/tools/sample.png"
-        subtitle: "NextCloud"
-        tag: "next_cloud"
-        keywords: "nextcloud"
+      - name: "FileBrowser"
+        logo: "assets/icons/filebrowser.png"
+        subtitle: "File Browser"
+        tag: "File Browser"
+        keywords: "file browser"
         url: "http://192.168.3.30:8081"
         target: "_blank" # optional html a tag target attribute 
 
