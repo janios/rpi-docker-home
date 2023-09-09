@@ -83,6 +83,11 @@ services:
         subtitle: "Rpi-monitoring"
         tag: "rpi_monitoring"
         url: "http://192.168.3.30:8888"
+      - name: "dash"
+        logo: "assets/icons/dash.png"
+        subtitle: "dash_dot"
+        tag: "dash_dot"
+        url: "http://192.168.3.30:8083"
   - name: "Servicios"
     icon: "fas fa-cloud"
     items:
