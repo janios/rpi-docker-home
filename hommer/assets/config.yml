@@ -87,14 +87,14 @@ services:
     icon: "fas fa-cloud"
     items:
       - name: "Plex"
-        logo: "assets/tools/transmission.png"
+        logo: "assets/icons/plex.png"
         subtitle: "plex service"
         tag: "plex"
         keywords: "plex"
         url: "http://192.168.3.30:32400/web/index.html#!/"
         target: "_blank" # optional html a tag target attribute
       - name: "Transmission"
-        logo: "assets/icons/plex.png"
+        logo: "assets/icons/transmission.png"
         subtitle: "transmission"
         tag: "plex"
         keywords: "plex"
