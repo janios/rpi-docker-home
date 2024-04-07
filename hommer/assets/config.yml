@@ -117,7 +117,7 @@ services:
         subtitle: "Home Assistant"
         tag: "Hole Assistant"
         keywords: "Home Assistant"
-        url: "http://192.168.3.30:8123"
+        url: "http://192.168.3.31:8123"
         target: "_blank" # optional html a tag target attribute 
 
         
