@@ -1,0 +1,6 @@
+.env
+flexget/flexget.log
+transmission_config/dht.dat
+flexget/.config-lock
+flexget/db-config-jobs.sqlite
+flexget/db-config.sqlite
