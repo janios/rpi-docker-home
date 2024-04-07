@@ -4,3 +4,6 @@ transmission_config/dht.dat
 flexget/.config-lock
 flexget/db-config-jobs.sqlite
 flexget/db-config.sqlite
+transmission_config/
+flexget/received/
+flexget/*.log
