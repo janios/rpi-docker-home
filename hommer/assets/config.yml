@@ -118,6 +118,13 @@ services:
         tag: "Hole Assistant"
         keywords: "Home Assistant"
         url: "http://192.168.3.31:8123"
+        target: "_blank" # optional html a tag target attribute
+      - name: "Pi Hole"
+        logo: "assets/icons/pihole.png"
+        subtitle: "Pi Hole"
+        tag: "Pi Hole"
+        keywords: "Pi Hole"
+        url: "http://192.168.3.30:81"
         target: "_blank" # optional html a tag target attribute 
 
         
