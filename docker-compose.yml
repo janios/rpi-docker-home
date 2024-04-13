@@ -224,6 +224,7 @@ services:
 
   db_nginx:
     image: yobasystems/alpine-mariadb:latest
+    container_name: db_nginx
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ROOTPASSWORD
