@@ -220,7 +220,7 @@ services:
     ports:
       - 80:80
       - 443:443
-      - 81:81
+      - 8381:81
     restart: unless-stopped
 
   db_nginx:
