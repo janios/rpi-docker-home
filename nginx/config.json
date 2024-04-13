@@ -1,0 +1,11 @@
+
+{
+    "database": {
+      "engine": "mysql",
+      "host": "db",
+      "name": "NombreBD",
+      "user": "UsuarioBD",
+      "password": "ContraseñaBD",
+      "port": 3306
+    }
+  }
