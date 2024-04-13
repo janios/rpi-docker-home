@@ -124,7 +124,7 @@ services:
         subtitle: "Pi Hole"
         tag: "Pi Hole"
         keywords: "Pi Hole"
-        url: "http://192.168.3.30:81/admin"
+        url: "http://192.168.3.30:8082/admin"
         target: "_blank" # optional html a tag target attribute 
 
         
