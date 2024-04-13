@@ -215,7 +215,7 @@ services:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
     depends_on:
-      - db
+      - db_nginx
     ports:
       - 80:80
       - 443:443
