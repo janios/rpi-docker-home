@@ -117,7 +117,7 @@ services:
     volumes:
       - ./hommer/assets/:/www/assets
     ports:
-      - 80:8080
+      - 8080:8080
     environment:
       - UID=1001 
       - GDI=1001  
@@ -163,6 +163,7 @@ services:
     restart: unless-stopped
   
   dash:
+    container_name: dash
     image: mauricenino/dashdot:latest
     restart: unless-stopped
     privileged: true
