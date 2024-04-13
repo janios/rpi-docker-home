@@ -5,5 +5,6 @@ flexget/.config-lock
 flexget/db-config-jobs.sqlite
 flexget/db-config.sqlite
 transmission_config/
+transmission_config/settings.json
 flexget/received/
 flexget/*.log
