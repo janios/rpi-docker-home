@@ -4,16 +4,20 @@ Repo utilizado para configurar servidores en raspberry pi
 
 Seguir los siguiente pasos
 
+
+
 1.- Configurar ip fija
 
 ```
-sudo nano /etc/dhcpcd.conf
+sudo nmtui
 ```
+
+importante al final de la ip a asignar agregar la mascara de subred con /24
+
+ejemplo
+
 ```
-interface eth0
-static ip_address=192.168.3.30/24
-static routers=192.168.3.1
-static domain_name_servers=192.168.3.1 8.8.8.8 
+192.168.3.30/24
 ```
 
 ***
