@@ -72,6 +72,13 @@ Agregar tu usuario al grupo docker
 sudo usermod -a -G docker pi
 ```    
 
+Instalar Docker-compose
+
+```
+sudo apt install docker-compose
+```   
+
+
 
 ***
 configurar archivo env
@@ -108,3 +115,40 @@ con
 ```
 chmod y chown
 ```
+
+
+# Nvme Rasperry pi 5
+
+Habilitar nvme
+
+```
+sudo nano /boot/firmware/config.txt
+```
+
+agregar las lineas 
+
+```
+dtparam=nvme
+dtparam=pciex1_gen=3
+```
+cambiar orden de boot
+
+```
+sudo rpi-eeprom-config --edit
+```
+
+modificar ultima linea debe de quedar
+
+```
+BOOT_ORDER=0xf416
+```
+
+agregar linea
+
+```
+PCIE_PROBE=1
+```
+
+copiar sd con la herramienta 
+ SD Card Copier desde accesorios desde el Raspberry
+ 
