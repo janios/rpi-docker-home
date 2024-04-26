@@ -1,8 +1,4 @@
-version: "2.1"
-
-volumes:
-  nextcloud:
-  db:
+version: "3"
 
 services:
   samba:
@@ -51,20 +47,6 @@ services:
             XDG_DOWNLOAD_DIR: /opt/JDownloader/Downloads
     ports:
         - 3129:3129
-
-
-  kitana:
-    image: pannal/kitana:latest
-    container_name: kitana
-    volumes:
-      - ${MEDIA_MOUNTING_POINT}/kitana_data:/app/data
-    ports:
-      - 31337:31337
-    links:
-      - plex
-    command: -B 0.0.0.0:31337 -P
-    restart: unless-stopped 
-
 
   portainer:
     image: portainer/portainer-ce
