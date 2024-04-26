@@ -123,8 +123,8 @@ services:
       - /etc:/dockerhost/etc:ro
       - /proc:/dockerhost/proc:ro
       - /usr/lib:/dockerhost/usr/lib:ro
-    devices:
-      - "/dev/vchiq:/dev/vchiq" 
+    #devices:
+    #  - "/dev/vchiq:/dev/vchiq" 
     restart: unless-stopped
     ports:
       - 8888:8888
