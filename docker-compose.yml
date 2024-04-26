@@ -11,7 +11,7 @@ services:
     environment:
       - TZ=America/Mexico_City
     ports:
-      - 139:130
+      - 139:139
       - 445:445
     volumes:
       - ${MEDIA_MOUNTING_POINT}:/media
@@ -65,7 +65,7 @@ services:
       - 32400:32400
       - 33400:33400
     hostname: plex
-    network_mode: "host"
+    #network_mode: "host"
     environment:
       - TZ=America/Mexico_City
     volumes:
