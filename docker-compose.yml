@@ -2,19 +2,17 @@ version: "3"
 
 services:
   samba:
-    image: dperson/samba:rpi
+    image: dockurr/samba:4.19.5
     container_name: samba
     restart: always
-    command: '-u "pi;Raspberry" -s "media;/media;yes;no;no"'
-    stdin_open: true
-    tty: true
     environment:
       - TZ=America/Mexico_City
+      - USER=${SAMBA_USER}
+      - PASS=${SAMBA_PASS}
     ports:
-      - 139:139
       - 445:445
     volumes:
-      - ${MEDIA_MOUNTING_POINT}:/media
+      - ${MEDIA_MOUNTING_POINT}:/storage
 
   transmission:
     image : jaymoulin/transmission:3.00-1.6.1
