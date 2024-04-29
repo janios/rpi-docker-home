@@ -11,7 +11,7 @@ services:
     environment:
       - TZ=America/Mexico_City
     ports:
-      - 130:130
+      - 139:139
       - 445:445
     volumes:
       - ${MEDIA_MOUNTING_POINT}:/media
