@@ -185,4 +185,24 @@ services:
     cap_add:
       - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
     restart: unless-stopped
+
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - ${MEDIA_MOUNTING_POINT}/home-config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    
+  node-red:
+    container_name: node-red
+    image: nodered/node-red:latest
+    environment:
+      - America/Mexico_City
+    ports:
+      - "1880:1880"
+    volumes:
+      - ${MEDIA_MOUNTING_POINT}/nodered-config:/data
   
