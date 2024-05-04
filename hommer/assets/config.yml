@@ -126,6 +126,7 @@ services:
         keywords: "Pi Hole"
         url: "http://192.168.3.30:81/admin"
         target: "_blank" # optional html a tag target attribute
+        apikey: 75622e30551f38d28f899a9b2ed9b8ab012af8714f384d73697828f734b478df
         type: "PiHole" 
 
         
