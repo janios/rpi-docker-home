@@ -190,21 +190,28 @@ services:
       - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
     restart: unless-stopped
   
-  netalertx:
-    container_name: netalertx
-    # use the below line if you want to test the latest dev image
-    # image: "jokobsk/netalertx-dev:latest" 
-    image: "jokobsk/netalertx:latest"      
-    network_mode: "host"        
-    restart: unless-stopped
+  # netalertx:
+  #   container_name: netalertx
+  #   # use the below line if you want to test the latest dev image
+  #   # image: "jokobsk/netalertx-dev:latest" 
+  #   image: "jokobsk/netalertx:latest"      
+  #   network_mode: "host"        
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ${MEDIA_MOUNTING_POINT}/netalert/config:/app/config
+  #     - ${MEDIA_MOUNTING_POINT}/netalert/db:/app/db      
+  #     # (optional) useful for debugging if you have issues setting up the container
+  #     - ${MEDIA_MOUNTING_POINT}/netalert/logs:/app/front/log
+  #   environment:
+  #     - TZ=America/Mexico_City      
+  #     - PORT=20211
+
+  pialert:
+    container_name: pialert
+    image: jokobsk/pi.alert
+    network_mode: host
     volumes:
-      - ${MEDIA_MOUNTING_POINT}/netalert/config:/app/config
-      - ${MEDIA_MOUNTING_POINT}/netalert/db:/app/db      
-      # (optional) useful for debugging if you have issues setting up the container
-      - ${MEDIA_MOUNTING_POINT}/netalert/logs:/app/front/log
-    environment:
-      - TZ=America/Mexico_City      
-      - PORT=20211
+      - ${MEDIA_MOUNTING_POINT}/pialert/config:/home/pi/pialert/config
 
   homeassistant:
     container_name: homeassistant
