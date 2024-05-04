@@ -9,6 +9,7 @@ services:
       - TZ=America/Mexico_City
       - USER=${SAMBA_USER}
       - PASS=${SAMBA_PASS}
+      - RW=true
     ports:
       - 445:445
     volumes:
