@@ -127,6 +127,16 @@ services:
         url: "http://192.168.3.30:81/admin"
         target: "_blank" # optional html a tag target attribute
         apikey: 75622e30551f38d28f899a9b2ed9b8ab012af8714f384d73697828f734b478df
-        type: "PiHole" 
+        type: "PiHole"
+  - name: "Clima"
+    icon: "fas fa-cloud"
+    items:
+      - name: "Clima"
+        location: "Toluca, MX" # your location.
+        locationId: "3515302" # Optional: Specify OpenWeatherMap city ID for better accuracy
+        apikey: "dcaa0a167e162a30d7f8c76c5736a672" # insert your own API key here. Request one from https://openweathermap.org/api.
+        units: "metric" # units to display temperature. Can be one of: metric, imperial, kelvin. Defaults to kelvin.
+        background: "circle" # choose which type of background you want behind the image. Can be one of: square, circle, none. Defaults to none.
+        type: "OpenWeather"      
 
         
