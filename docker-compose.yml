@@ -144,6 +144,7 @@ services:
   
   dash:
     image: mauricenino/dashdot:latest
+    container_name: dash
     restart: unless-stopped
     privileged: true
     ports:
