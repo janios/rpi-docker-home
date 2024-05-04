@@ -138,5 +138,12 @@ services:
         units: "metric" # units to display temperature. Can be one of: metric, imperial, kelvin. Defaults to kelvin.
         background: "circle" # choose which type of background you want behind the image. Can be one of: square, circle, none. Defaults to none.
         type: "OpenWeather"      
+      - name: "Clima Zacatñam"
+        location: "Zacatlan, MX" # your location.
+        locationId: "3514148" # Optional: Specify OpenWeatherMap city ID for better accuracy
+        apikey: "dcaa0a167e162a30d7f8c76c5736a672" # insert your own API key here. Request one from https://openweathermap.org/api.
+        units: "metric" # units to display temperature. Can be one of: metric, imperial, kelvin. Defaults to kelvin.
+        background: "circle" # choose which type of background you want behind the image. Can be one of: square, circle, none. Defaults to none.
+        type: "OpenWeather"      
 
         
