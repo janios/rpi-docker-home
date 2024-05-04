@@ -203,7 +203,7 @@ services:
       # (optional) useful for debugging if you have issues setting up the container
       - ${MEDIA_MOUNTING_POINT}/netalert/logs:/app/front/log
     environment:
-      - TZ=EAmerica/Mexico_City      
+      - TZ=America/Mexico_City      
       - PORT=20211
 
   homeassistant:
