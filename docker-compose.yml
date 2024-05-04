@@ -9,6 +9,8 @@ services:
       - TZ=America/Mexico_City
       - USER=${SAMBA_USER}
       - PASS=${SAMBA_PASS}
+      - UID=1000    
+      - GID=1000    
       - RW=true
     ports:
       - 445:445
