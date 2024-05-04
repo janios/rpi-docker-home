@@ -59,11 +59,11 @@ services:
   plex:
     image: jaymoulin/plex:1.40.2.8395-armhf
     container_name: plex
-    ports:
-      - 32400:32400
-      - 33400:33400
+    #ports:
+    #  - 32400:32400
+    #  - 33400:33400
     hostname: plex
-    #network_mode: "host"
+    network_mode: "host"
     environment:
       - TZ=America/Mexico_City
     volumes:
