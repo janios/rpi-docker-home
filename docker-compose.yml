@@ -59,11 +59,11 @@ services:
   plex:
     image: jaymoulin/plex:1.40.2.8395-armhf
     container_name: plex
-    ports:
-      - 32400:32400
-      - 33400:33400
+    #ports:
+    #  - 32400:32400
+    #  - 33400:33400
     hostname: plex
-    #network_mode: "host"
+    network_mode: "host"
     environment:
       - TZ=America/Mexico_City
     volumes:
@@ -144,6 +144,7 @@ services:
   
   dash:
     image: mauricenino/dashdot:latest
+    container_name: dash
     restart: unless-stopped
     privileged: true
     ports:
@@ -185,4 +186,24 @@ services:
     cap_add:
       - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
     restart: unless-stopped
+
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - ${MEDIA_MOUNTING_POINT}/home-config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    
+  node-red:
+    container_name: node-red
+    image: nodered/node-red:latest
+    environment:
+      - America/Mexico_City
+    ports:
+      - "1880:1880"
+    volumes:
+      - ${MEDIA_MOUNTING_POINT}/nodered-config:/data
   
