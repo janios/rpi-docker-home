@@ -1,6 +1,17 @@
 version: "3"
 
 services:
+  traefik:
+    image: traefik:latest
+    command:
+      - "--api.insecure=true"  # Enable dashboard for development (use with caution)
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"  # Only expose services with labels
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
   samba:
     image: dockurr/samba:4.19.5
     container_name: samba
@@ -108,7 +119,7 @@ services:
       - traefik.enable=true
       - traefik.docker.network=public
       - traefik.http.routers.homer-secure.entrypoints=https
-      - traefik.http.routers.homer-secure.rule=Host(`home.example.org`)
+      - traefik.http.routers.homer-secure.rule=Host(`homer.raspberrypi.local/`)
       - traefik.http.routers.homer-secure.tls=true
       - traefik.http.routers.homer-secure.tls.certresolver=certlocal
       - traefik.http.services.homer.loadbalancer.server.port=8080
