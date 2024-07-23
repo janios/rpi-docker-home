@@ -216,13 +216,13 @@ services:
     privileged: true
     network_mode: host
     
-  node-red:
-    container_name: node-red
-    image: nodered/node-red:latest
-    environment:
-      - America/Mexico_City
-    ports:
-      - "1880:1880"
+  mosquitto:
+    image: eclipse-mosquitto
+    network_mode: host  
     volumes:
-      - ${MEDIA_MOUNTING_POINT}/nodered-config:/data
+      - ${MEDIA_MOUNTING_POINT}/mosquitto/config:/mosquitto/config
+      - ${MEDIA_MOUNTING_POINT}/mosquitto/data:/mosquitto/data
+      - ${MEDIA_MOUNTING_POINT}/mosquitto/log:/mosquitto/log
+    container_name: mqttbroker
+    restart: unless-stopped
   
