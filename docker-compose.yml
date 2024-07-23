@@ -220,9 +220,9 @@ services:
     image: eclipse-mosquitto
     network_mode: host  
     volumes:
-      - ${MEDIA_MOUNTING_POINT}/mosquitto/config:/mosquitto/config
-      - ${MEDIA_MOUNTING_POINT}/mosquitto/data:/mosquitto/data
-      - ${MEDIA_MOUNTING_POINT}/mosquitto/log:/mosquitto/log
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
     container_name: mqttbroker
     restart: unless-stopped
   
