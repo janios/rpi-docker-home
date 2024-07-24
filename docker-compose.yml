@@ -226,3 +226,14 @@ services:
     container_name: mqttbroker
     restart: unless-stopped
   
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    image: koenkk/zigbee2mqtt
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    environment:
+      - TZ=America/Mexico_City
+    volumes:
+      - /run/udev:/run/udev:ro
+      - ${MEDIA_MOUNTING_POINT}/zigbee2mqtt:/app/data
