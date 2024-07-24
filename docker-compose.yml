@@ -229,6 +229,8 @@ services:
   zigbee2mqtt:
     container_name: zigbee2mqtt
     image: koenkk/zigbee2mqtt
+    ports:
+      - 830:8080
     restart: unless-stopped
     network_mode: host
     privileged: true
