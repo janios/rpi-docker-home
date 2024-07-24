@@ -237,3 +237,5 @@ services:
     volumes:
       - /run/udev:/run/udev:ro
       - ${MEDIA_MOUNTING_POINT}/zigbee2mqtt:/app/data
+    depends_on:
+      - mosquitto 
