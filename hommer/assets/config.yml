@@ -101,8 +101,8 @@ services:
       - name: "Transmission"
         logo: "assets/icons/transmission.png"
         subtitle: "transmission"
-        tag: "plex"
-        keywords: "plex"
+        tag: "transmission"
+        keywords: "transmission"
         url: "http://192.168.3.30:9091"
         target: "_blank" # optional html a tag target attribute 
       - name: "FileBrowser"
@@ -117,7 +117,7 @@ services:
         subtitle: "Home Assistant"
         tag: "Hole Assistant"
         keywords: "Home Assistant"
-        url: "http://192.168.3.30:8123"
+        url: "http://192.168.3.31:8123"
         target: "_blank" # optional html a tag target attribute
       - name: "Pi Hole"
         logo: "assets/icons/pihole.png"
