@@ -172,15 +172,17 @@ services:
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
-    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
-      - "81:80/tcp"
+    # For DHCP it is recommended to remove these ports and instead add: 
+    network_mode: "host"
+    #ports:
+      #- "53:53/tcp"
+      #- "53:53/udp"
+      #- "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
+      #- "81:80/tcp"
     environment:
       TZ: America/Mexico_City
       WEBPASSWORD: ${PI_HOLE_PASS}
+      WEB_PORT: 81
     # Volumes store your data between container upgrades
     volumes:
       - './etc-pihole:/etc/pihole'
@@ -189,53 +191,3 @@ services:
     cap_add:
       - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
     restart: unless-stopped
-  
-  netalertx:
-    container_name: netalertx
-    # use the below line if you want to test the latest dev image
-    # image: "jokobsk/netalertx-dev:latest" 
-    image: "jokobsk/netalertx:latest"      
-    network_mode: "host"        
-    restart: unless-stopped
-    volumes:
-      - ${MEDIA_MOUNTING_POINT}/netalert/config:/app/config
-      - ${MEDIA_MOUNTING_POINT}/netalert/db:/app/db      
-      # (optional) useful for debugging if you have issues setting up the container
-      - ${MEDIA_MOUNTING_POINT}/netalert/logs:/app/front/log
-    environment:
-      - TZ=America/Mexico_City      
-      - PORT=20211
-
-  homeassistant:
-    container_name: homeassistant
-    image: "ghcr.io/home-assistant/home-assistant:stable"
-    volumes:
-      - ${MEDIA_MOUNTING_POINT}/home-config:/config
-      - /etc/localtime:/etc/localtime:ro
-    restart: unless-stopped
-    privileged: true
-    network_mode: host
-    
-  mosquitto:
-    image: eclipse-mosquitto
-    network_mode: host  
-    volumes:
-      - ${MEDIA_MOUNTING_POINT}/mosquitto/config:/mosquitto/config
-      - ${MEDIA_MOUNTING_POINT}/mosquitto/data:/mosquitto/data
-      - ${MEDIA_MOUNTING_POINT}/mosquitto/log:/mosquitto/log
-    container_name: mqttbroker
-    restart: unless-stopped
-  
-  zigbee2mqtt:
-    container_name: zigbee2mqtt
-    image: koenkk/zigbee2mqtt
-    restart: unless-stopped
-    network_mode: host
-    privileged: true
-    environment:
-      - TZ=America/Mexico_City
-    volumes:
-      - /run/udev:/run/udev:ro
-      - ${MEDIA_MOUNTING_POINT}/zigbee2mqtt:/app/data
-    depends_on:
-      - mosquitto 
