@@ -60,17 +60,17 @@ services:
     ports:
       - 9000:9000
 
-    jellyfin:
-      image: jellyfin/jellyfin:latest
-      container_name: jellyfin
-      network_mode: "host"
-      environment:
-        - TZ=America/Mexico_City
-      volumes:
-        - ${MEDIA_MOUNTING_POINT}/jellyfin/config:/config
-        - ${MEDIA_MOUNTING_POINT}/jellyfin/cache:/cache
-        - ${MEDIA_MOUNTING_POINT}/plex-media:/media
-      restart: always
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    network_mode: "host"
+    environment:
+      - TZ=America/Mexico_City
+    volumes:
+      - ${MEDIA_MOUNTING_POINT}/jellyfin/config:/config
+      - ${MEDIA_MOUNTING_POINT}/jellyfin/cache:/cache
+      - ${MEDIA_MOUNTING_POINT}/plex-media:/media
+    restart: always
 
   flexget:
     image: wiserain/flexget:3.5
