@@ -165,6 +165,20 @@ services:
       - TOKEN=${DUCKDNS_TOKEN}
     restart: unless-stopped
 
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    ports:
+      - 6767:6767
+    volumes:
+      - ${MEDIA_MOUNTING_POINT}/bazarr/config:/config
+      - ${MEDIA_MOUNTING_POINT}/plex-media:/media
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Mexico_City
+    restart: unless-stopped
+
   pihole:
     container_name: pihole
     image: pihole/pihole:latest

@@ -119,6 +119,20 @@ services:
         keywords: "Home Assistant"
         url: "http://192.168.3.31:8123"
         target: "_blank" # optional html a tag target attribute
+      - name: "Bazzar"
+        logo: "assets/icons/bazzar.png"
+        subtitle: "Bazzar"
+        tag: "Bazzar"
+        keywords: "Bazzar"
+        url: "http://192.168.3.31:6767"
+        target: "_blank" # optional html a tag target attribute
+      - name: "Flexget"
+        logo: "assets/icons/flexget.png"
+        subtitle: "Flexget"
+        tag: "flexget"
+        keywords: "flexget"
+        url: "http://192.168.3.31:5050"
+        target: "_blank" # optional html a tag target attribute
       - name: "Pi Hole"
         logo: "assets/icons/pihole.png"
         subtitle: "Pi Hole"
