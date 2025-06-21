@@ -21,6 +21,7 @@ services:
     image : jaymoulin/transmission:3.00-1.6.1
     container_name: transmission
     command: transmission-daemon -f -g /config
+    user: "1000:1000"
     volumes:
       - ./transmission_config:/config
       - ${MEDIA_MOUNTING_POINT}/torrents:/downloads
@@ -59,21 +60,17 @@ services:
     ports:
       - 9000:9000
 
-  plex:
-    image: jaymoulin/plex:1.40.2.8395-armhf
-    container_name: plex
-    #ports:
-    #  - 32400:32400
-    #  - 33400:33400
-    hostname: plex
-    network_mode: "host"
-    environment:
-      - TZ=America/Mexico_City
-    volumes:
-      - ${MEDIA_MOUNTING_POINT}/plex:/root/Library/Application Support/Plex Media Server
-      - ${MEDIA_MOUNTING_POINT}/plex-media:/media
-      - ${MEDIA_MOUNTING_POINT}/plex-tmp:/tmp
-    restart: always
+    jellyfin:
+      image: jellyfin/jellyfin:latest
+      container_name: jellyfin
+      network_mode: "host"
+      environment:
+        - TZ=America/Mexico_City
+      volumes:
+        - ${MEDIA_MOUNTING_POINT}/jellyfin/config:/config
+        - ${MEDIA_MOUNTING_POINT}/jellyfin/cache:/cache
+        - ${MEDIA_MOUNTING_POINT}/plex-media:/media
+      restart: always
 
   flexget:
     image: wiserain/flexget:3.5
