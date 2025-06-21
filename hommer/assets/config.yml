@@ -91,12 +91,12 @@ services:
   - name: "Servicios"
     icon: "fas fa-cloud"
     items:
-      - name: "Plex"
-        logo: "assets/icons/plex.png"
-        subtitle: "plex service"
-        tag: "plex"
-        keywords: "plex"
-        url: "http://192.168.3.30:32400/web/index.html#!/"
+      - name: "Jellyfin"
+        logo: "assets/icons/jellyfin.png"
+        subtitle: "Jellyfin service"
+        tag: "Jellyfin"
+        keywords: "Jellyfin"
+        url: "http://192.168.3.30:8096/web/#/home.html"
         target: "_blank" # optional html a tag target attribute
       - name: "Transmission"
         logo: "assets/icons/transmission.png"

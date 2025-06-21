@@ -21,7 +21,6 @@ services:
     image : jaymoulin/transmission:3.00-1.6.1
     container_name: transmission
     command: transmission-daemon -f -g /config
-    user: "1000:1000"
     volumes:
       - ./transmission_config:/config
       - ${MEDIA_MOUNTING_POINT}/torrents:/downloads
