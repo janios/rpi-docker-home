@@ -1,8 +1,7 @@
 web_server:
+  web_interface: flexget.webui
   bind: 0.0.0.0
   port: 5050
-
-webui:
   password: Raspberry
 
 schedules:
