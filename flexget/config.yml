@@ -1,102 +1,45 @@
-web_server: yes
+web_server:
+  web_interface: flexget.webui
+  bind: 0.0.0.0
+  port: 5050
+  password: Raspberry
 
 schedules:
   - tasks: '*'
     interval:
       minutes: 10
 
-templates:
-  tv:
-    regexp:
-      reject:
-        - x265: {from: title}
-    series:
-      settings:
-        tv:
-          exact: yes
-          propers: 12 hours
-          quality: 720p
-      tv:
-      - Black Mirror
-      - Brooklyn Nine-Nine
-      - Homeland
-      - Luther
-      - Mr Robot
-      - Rick and Morty
-      - SEAL Team
-      - Sherlock
-      - Silicon Valley
-      - Suits
-      - The Flash
-      - The Good Fight
-      - The Walking Dead
-      - Tosh.0
-      - True Detective
-      - Westworld
-
-    transmission:
-      host: 192.168.3.30
-      port: 9091
-      username: pi
-      password: Raspberry
-
 tasks:
-  eztvrss:
-    rss: https://eztv.ag/ezrss.xml
-    template: tv
-    priority: 2
-  sort_tv:
-    priority: 2
+  move_media_files:
+    priority: 1
     no_entries_ok: yes
-    parsing:
-      series: guessit
     filesystem:
       path: /downloads/
       regexp: '.*\.(avi|mkv|mp4)$'
       recursive: yes
     accept_all: yes
-    thetvdb_lookup: yes
-    require_field: series_name
-    all_series:
-      parse_only: yes
     exec:
       auto_escape: yes
       on_output:
-        for_entries: |
-          if mediainfo "{{ location }}" | grep EAC3; then
-            mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" && ffmpeg -hwaccel auto -y -i "{{ location }}" -map 0 -c:s copy -c:v copy -c:a ac3 -b:a 640k "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}"
+        for_entries: >
+          if echo "{{ location }}" | grep -i -E 'S[0-9]{2}E[0-9]{2}'; then
+            mkdir -p "/storage/series" && mv "{{ location }}" "/storage/series/"
           else
-            mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" && cp "{{ location }}" "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}"
+            mkdir -p "/storage/pelis" && mv "{{ location }}" "/storage/pelis/"
           fi
-  sort_movies:
-    priority: 2
-    no_entries_ok: yes
-    filesystem:
-      path: /downloads/
-      regexp: '.*\.(avi|mkv|mp4)$'
-      recursive: yes
-    accept_all: yes
-    require_field: movie_name
-    tmdb_lookup: yes
-    exec:
-      auto_escape: yes
-      on_output:
-       for_entries: 
-         mkdir -p "/storage/pelis/{{ movie_name }} ({{ movie_year }})" && cp "{{ location }}" "/storage/pelis/{{ movie_name }} ({{ movie_year }})/{{ movie_name }} ({{ movie_year }}){{ location | pathext }}"
-  remove_stale_torrents:
+
+  remove_finished_torrents:
     from_transmission:
-      host: 192.168.3.30
-      port: 9091 
+      host: transmission
+      port: 9091
       username: pi
       password: Raspberry
     disable: [seen, seen_info_hash]
     if:
       - transmission_progress == 100: accept
-      - not transmission_seed_ratio_ok: reject
-      - not transmission_idle_limit_ok: reject
     transmission:
-      host: 192.168.3.30
+      host: transmission
       port: 9091
       username: pi
       password: Raspberry
-      action: purge
+      action: remove
