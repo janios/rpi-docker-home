@@ -1,8 +1,4 @@
-web_server:
-  web_interface: flexget.webui
-  bind: 0.0.0.0
-  port: 5050
-  password: Raspberry
+web_server: yes
 
 schedules:
   - tasks: '*'
@@ -10,7 +6,34 @@ schedules:
       minutes: 10
 
 tasks:
-  move_media_files:
+  sort_tv:
+    priority: 1
+    no_entries_ok: yes
+    parsing:
+      series: guessit
+    filesystem:
+      path: /downloads/
+      regexp: '.*\.(avi|mkv|mp4)$'
+      recursive: yes
+    accept_all: yes
+    thetvdb_lookup: yes
+    require_field: series_name
+    all_series:
+      parse_only: yes
+    exec:
+      auto_escape: yes
+      on_output:
+        for_entries: >
+          if mediainfo "{{ location }}" | grep EAC3; then
+            mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" &&
+            ffmpeg -hwaccel auto -y -i "{{ location }}" -map 0 -c:s copy -c:v copy -c:a ac3 -b:a 640k \
+            "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}"
+          else
+            mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" &&
+            mv "{{ location }}" "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}"
+          fi
+
+  sort_movies:
     priority: 1
     no_entries_ok: yes
     filesystem:
@@ -18,15 +41,14 @@ tasks:
       regexp: '.*\.(avi|mkv|mp4)$'
       recursive: yes
     accept_all: yes
+    require_field: movie_name
+    tmdb_lookup: yes
     exec:
       auto_escape: yes
       on_output:
         for_entries: >
-          if echo "{{ location }}" | grep -i -E 'S[0-9]{2}E[0-9]{2}'; then
-            mkdir -p "/storage/series" && mv "{{ location }}" "/storage/series/"
-          else
-            mkdir -p "/storage/pelis" && mv "{{ location }}" "/storage/pelis/"
-          fi
+          mkdir -p "/storage/pelis/{{ movie_name }} ({{ movie_year }})" &&
+          mv "{{ location }}" "/storage/pelis/{{ movie_name }} ({{ movie_year }})/{{ movie_name }} ({{ movie_year }}){{ location | pathext }}"
 
   remove_finished_torrents:
     from_transmission:
@@ -34,9 +56,7 @@ tasks:
       port: 9091
       username: pi
       password: Raspberry
-    disable:
-      - seen
-      - seen_info_hash
+    disable: [seen, seen_info_hash]
     if:
       - transmission_progress == 100: accept
     transmission:
