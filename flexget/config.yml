@@ -36,6 +36,8 @@ tasks:
   sort_movies:
     priority: 1
     no_entries_ok: yes
+    disable:
+      - seen
     filesystem:
       path: /downloads/
       regexp: '.*\.(avi|mkv|mp4)$'
@@ -49,6 +51,7 @@ tasks:
         for_entries: >
           mkdir -p "/storage/pelis/{{ movie_name }} ({{ movie_year }})" &&
           mv "{{ location }}" "/storage/pelis/{{ movie_name }} ({{ movie_year }})/{{ movie_name }} ({{ movie_year }}){{ location | pathext }}"
+
 
   remove_finished_torrents:
     from_transmission:
