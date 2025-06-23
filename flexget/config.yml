@@ -36,8 +36,6 @@ tasks:
   sort_movies:
     priority: 1
     no_entries_ok: yes
-    disable:
-      - seen
     filesystem:
       path: /downloads/
       regexp: '.*\.(avi|mkv|mp4)$'
