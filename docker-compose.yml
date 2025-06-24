@@ -59,20 +59,16 @@ services:
     ports:
       - 9000:9000
 
-  plex:
-    image: jaymoulin/plex:1.40.2.8395-armhf
-    container_name: plex
-    #ports:
-    #  - 32400:32400
-    #  - 33400:33400
-    hostname: plex
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
     network_mode: "host"
     environment:
       - TZ=America/Mexico_City
     volumes:
-      - ${MEDIA_MOUNTING_POINT}/plex:/root/Library/Application Support/Plex Media Server
+      - ${MEDIA_MOUNTING_POINT}/jellyfin/config:/config
+      - ${MEDIA_MOUNTING_POINT}/jellyfin/cache:/cache
       - ${MEDIA_MOUNTING_POINT}/plex-media:/media
-      - ${MEDIA_MOUNTING_POINT}/plex-tmp:/tmp
     restart: always
 
   flexget:
@@ -167,6 +163,20 @@ services:
       - TZ=America/Mexico_City
       - SUBDOMAINS=${DUCKDNS_SUBDOMAINS}
       - TOKEN=${DUCKDNS_TOKEN}
+    restart: unless-stopped
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    ports:
+      - 6767:6767
+    volumes:
+      - ${MEDIA_MOUNTING_POINT}/bazarr/config:/config
+      - ${MEDIA_MOUNTING_POINT}/plex-media:/media
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Mexico_City
     restart: unless-stopped
 
   pihole:
