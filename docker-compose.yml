@@ -197,16 +197,6 @@ services:
       - TZ=America/Mexico_City
     restart: unless-stopped
 
-  pihole-init:
-    image: alpine:3.20
-    container_name: pihole-init
-    volumes:
-      - ./etc-dnsmasq.d:/etc/dnsmasq.d
-    command: >
-      sh -lc "mkdir -p /etc/dnsmasq.d &&
-              echo 'address=/raspberry-flexget.tail85d034.ts.net/192.168.3.30'
-              > /etc/dnsmasq.d/99-tailscale.conf"
-
   pihole:
     image: pihole/pihole:2025.08.0
     container_name: pihole
@@ -215,16 +205,20 @@ services:
       TZ: America/Mexico_City
       WEBPASSWORD: ${PI_HOLE_PASS}
       WEB_PORT: 81
-      FTLCONF_LOCAL_IPV4: 192.168.3.30
       PIHOLE_DNS_: 1.1.1.1;8.8.8.8
+      FTLCONF_dns_listeningMode: all
     volumes:
       - ./etc-pihole:/etc/pihole
       - ./etc-dnsmasq.d:/etc/dnsmasq.d
+    entrypoint: ["/bin/bash","-lc"]
+    command: >
+      echo 'address=/raspberry-flexget.tail85d034.ts.net/192.168.3.30'
+      > /etc/dnsmasq.d/99-tailscale.conf
+      && exec /start.sh
     cap_add:
       - NET_ADMIN
-    depends_on:
-      - pihole-init
     restart: unless-stopped
+
 
   tailscale:
     image: tailscale/tailscale:v1.88.4 
