@@ -83,7 +83,8 @@ services:
       - 5050:5050
     environment:
       - TORRENT_PLUGIN=transmission
-      - FG_WEBUI_PASSWD=${FLEXGET_USER}
+      - FG_WEBUI_USER=${FLEXGET_USER}
+      - FG_WEBUI_PASSWD=${FLEXGET_PASS}
       - PUID=1000
       - PGID=1000
       - TZ=America/Mexico_City
