@@ -208,7 +208,7 @@ services:
               > /etc/dnsmasq.d/99-tailscale.conf"
 
   pihole:
-    image: pihole/pihole:v5.20.1
+    image: pihole/pihole:2025.01.0
     container_name: pihole
     network_mode: "host"
     environment:
