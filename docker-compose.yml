@@ -219,3 +219,20 @@ services:
     cap_add:
       - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
     restart: unless-stopped
+
+
+  tailscale:
+    image: tailscale/tailscale:v1.76.1
+    container_name: tailscale
+    hostname: raspberry-flexget
+    restart: unless-stopped
+    network_mode: "host"
+    privileged: true
+    environment:
+      - TS_AUTHKEY=${TAILSCALE_AUTHKEY}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_EXTRA_ARGS=--advertise-exit-node
+      - TS_ACCEPT_DNS=true
+    volumes:
+      - ./tailscale/state:/var/lib/tailscale
+      - /dev/net/tun:/dev/net/tun
