@@ -210,14 +210,16 @@ services:
     volumes:
       - ./etc-pihole:/etc/pihole
       - ./etc-dnsmasq.d:/etc/dnsmasq.d
-    entrypoint: ["/bin/bash","-lc"]
-    command: >
-      echo 'address=/raspberry-flexget.tail85d034.ts.net/192.168.3.30'
-      > /etc/dnsmasq.d/99-tailscale.conf
-      && exec /start.sh
     cap_add:
       - NET_ADMIN
+    healthcheck:
+      test: ["CMD", "pihole", "status"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     restart: unless-stopped
+
 
 
   tailscale:
