@@ -207,37 +207,37 @@ services:
               echo 'address=/raspberry-flexget.tail85d034.ts.net/192.168.3.30'
               > /etc/dnsmasq.d/99-tailscale.conf"
 
-pihole:
-  image: pihole/pihole:v5.20.1
-  container_name: pihole
-  network_mode: "host"
-  environment:
-    TZ: America/Mexico_City
-    WEBPASSWORD: ${PI_HOLE_PASS}
-    WEB_PORT: 81
-    FTLCONF_LOCAL_IPV4: 192.168.3.30
-    PIHOLE_DNS_: 1.1.1.1;8.8.8.8
-  volumes:
-    - ./etc-pihole:/etc/pihole
-    - ./etc-dnsmasq.d:/etc/dnsmasq.d
-  cap_add:
-    - NET_ADMIN
-  depends_on:
-    - pihole-init
-  restart: unless-stopped
-
-  tailscale:
-    image: tailscale/tailscale:v1.88.4 
-    container_name: tailscale
-    hostname: raspberry-flexget
-    restart: unless-stopped
+  pihole:
+    image: pihole/pihole:v5.20.1
+    container_name: pihole
     network_mode: "host"
-    privileged: true
     environment:
-      - TS_AUTHKEY=${TAILSCALE_AUTHKEY}
-      - TS_STATE_DIR=/var/lib/tailscale
-      - TS_EXTRA_ARGS=--advertise-exit-node
-      - TS_ACCEPT_DNS=true
+      TZ: America/Mexico_City
+      WEBPASSWORD: ${PI_HOLE_PASS}
+      WEB_PORT: 81
+      FTLCONF_LOCAL_IPV4: 192.168.3.30
+      PIHOLE_DNS_: 1.1.1.1;8.8.8.8
     volumes:
-      - ./tailscale/state:/var/lib/tailscale
-      - /dev/net/tun:/dev/net/tun
+      - ./etc-pihole:/etc/pihole
+      - ./etc-dnsmasq.d:/etc/dnsmasq.d
+    cap_add:
+      - NET_ADMIN
+    depends_on:
+      - pihole-init
+    restart: unless-stopped
+
+    tailscale:
+      image: tailscale/tailscale:v1.88.4 
+      container_name: tailscale
+      hostname: raspberry-flexget
+      restart: unless-stopped
+      network_mode: "host"
+      privileged: true
+      environment:
+        - TS_AUTHKEY=${TAILSCALE_AUTHKEY}
+        - TS_STATE_DIR=/var/lib/tailscale
+        - TS_EXTRA_ARGS=--advertise-exit-node
+        - TS_ACCEPT_DNS=true
+      volumes:
+        - ./tailscale/state:/var/lib/tailscale
+        - /dev/net/tun:/dev/net/tun
