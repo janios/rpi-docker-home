@@ -83,8 +83,8 @@ services:
       - 5050:5050
     environment:
       - TORRENT_PLUGIN=transmission
-      - FG_WEBUI_USER=${FLEXGET_USER}
-      - FG_WEBUI_PASSWD=${FLEXGET_PASS}
+      - FG_WEBUI_USER=pi
+      - FG_WEBUI_PASSWD=Raspberry
       - PUID=1000
       - PGID=1000
       - TZ=America/Mexico_City
