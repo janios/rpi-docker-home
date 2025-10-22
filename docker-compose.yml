@@ -83,7 +83,7 @@ services:
       - 5050:5050
     environment:
       - TORRENT_PLUGIN=transmission
-      - FG_WEBUI_USER=${FLEXGET_USER}
+      - FG_WEBUI_USER=flexget
       - FG_WEBUI_PASSWD=Raspberry1986!
       - PUID=1000
       - PGID=1000
@@ -91,6 +91,20 @@ services:
     restart: unless-stopped
     depends_on:
       - transmission
+    command: >
+      bash -c "
+        if [ ! -f /config/.ffmpeg_installed ]; then
+          apt-get update -y &&
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ffmpeg mediainfo &&
+          apt-get clean &&
+          rm -rf /var/lib/apt/lists/* &&
+          touch /config/.ffmpeg_installed;
+        fi;
+        mkdir -p /config/.flexget;
+        ln -sf /config/config.yml /config/.flexget/config.yml;
+        flexget daemon start --autoreload-config;
+        tail -f /dev/null
+      "
 
   homer:
     image: b4bz/homer
