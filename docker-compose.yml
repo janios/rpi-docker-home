@@ -198,14 +198,14 @@ services:
     restart: unless-stopped
 
   pihole-init:
-  image: alpine:3.20
-  container_name: pihole-init
-  volumes:
-    - ./etc-dnsmasq.d:/etc/dnsmasq.d
-  command: >
-    sh -lc "mkdir -p /etc/dnsmasq.d &&
-            echo 'address=/raspberry-flexget.tail85d034.ts.net/192.168.3.30'
-            > /etc/dnsmasq.d/99-tailscale.conf"
+    image: alpine:3.20
+    container_name: pihole-init
+    volumes:
+      - ./etc-dnsmasq.d:/etc/dnsmasq.d
+    command: >
+      sh -lc "mkdir -p /etc/dnsmasq.d &&
+              echo 'address=/raspberry-flexget.tail85d034.ts.net/192.168.3.30'
+              > /etc/dnsmasq.d/99-tailscale.conf"
 
 pihole:
   image: pihole/pihole:v5.20.1
