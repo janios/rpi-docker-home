@@ -218,11 +218,18 @@ services:
       - /dev/net/tun:/dev/net/tun
 
     wol:
-      image: ghcr.io/baspar/wol-web:v1.3.0
+      image: alpine:3.20
       container_name: wol
-      restart: unless-stopped
       network_mode: "host"
+      restart: unless-stopped
       environment:
         - TZ=America/Mexico_City
       volumes:
-        - ./wol/config:/app/config
+        - ./wol/config:/app
+      command: >
+        sh -c "
+          apk add --no-cache python3 py3-pip wakeonlan &&
+          pip install --no-cache-dir flask &&
+          python3 /app/wol_server.py
+        "
+
