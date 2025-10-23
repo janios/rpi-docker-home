@@ -198,28 +198,20 @@ services:
     restart: unless-stopped
 
   pihole:
-    image: pihole/pihole:2025.05.0
+    image: pihole/pihole:2024.03.0
     container_name: pihole
     network_mode: "host"
     environment:
       TZ: America/Mexico_City
       WEBPASSWORD: ${PI_HOLE_PASS}
       WEB_PORT: 81
-      PIHOLE_DNS_: 1.1.1.1;8.8.8.8
       FTLCONF_dns_listeningMode: all
     volumes:
       - ./etc-pihole:/etc/pihole
       - ./etc-dnsmasq.d:/etc/dnsmasq.d
     cap_add:
       - NET_ADMIN
-    healthcheck:
-      test: ["CMD", "pihole", "status"]
-      interval: 60s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
     restart: unless-stopped
-
 
 
   tailscale:
