@@ -229,7 +229,8 @@ services:
     command: >
       sh -c "
         apk add --no-cache python3 py3-pip &&
-        pip install --no-cache-dir flask wakeonlan &&
+        pip install --no-cache-dir --break-system-packages flask wakeonlan &&
         python3 /app/wol_server.py
       "
+
 
