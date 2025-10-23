@@ -76,6 +76,7 @@ services:
     container_name: flexget
     volumes:
       - ./flexget:/config
+      - ./flexget/custom-cont-init.d:/custom-cont-init.d
       - ${MEDIA_MOUNTING_POINT}/torrents/complete:/downloads
       - ${MEDIA_MOUNTING_POINT}/plex-media:/storage
     ports:
@@ -87,8 +88,6 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/Mexico_City
-      - DOCKER_MODS=linuxserver/mods:universal-package-install
-      - INSTALL_PACKAGES=rsync ffmpeg mediainfo
     restart: unless-stopped
     depends_on:
       - transmission
