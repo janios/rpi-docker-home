@@ -92,12 +92,9 @@ services:
     depends_on:
       - transmission
     command: >
-      bash -c "
+      sh -lc "
         if [ ! -f /config/.deps_installed ]; then
-          apt-get update -y &&
-          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ffmpeg mediainfo rsync &&
-          apt-get clean &&
-          rm -rf /var/lib/apt/lists/* &&
+          apk add --no-cache ffmpeg mediainfo rsync &&
           touch /config/.deps_installed;
         fi;
         mkdir -p /config/.flexget;
@@ -105,6 +102,7 @@ services:
         flexget daemon start --autoreload-config;
         tail -f /dev/null
       "
+
 
 
   homer:
