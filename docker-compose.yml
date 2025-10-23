@@ -228,8 +228,8 @@ services:
       - ./wol/config:/app
     command: >
       sh -c "
-        apk add --no-cache python3 py3-pip wakeonlan &&
-        pip install --no-cache-dir flask &&
+        apk add --no-cache python3 py3-pip &&
+        pip install --no-cache-dir flask wakeonlan &&
         python3 /app/wol_server.py
       "
 
