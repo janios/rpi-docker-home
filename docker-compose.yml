@@ -71,27 +71,27 @@ services:
       - ${MEDIA_MOUNTING_POINT}/plex-media:/media
     restart: always
 
-    flexget:
-      image: lscr.io/linuxserver/flexget:version-v3.18.16
-      container_name: flexget
-      volumes:
-        - ./flexget:/config
-        - ${MEDIA_MOUNTING_POINT}/torrents/complete:/downloads
-        - ${MEDIA_MOUNTING_POINT}/plex-media:/storage
-      ports:
-        - 5050:5050
-      environment:
-        - TORRENT_PLUGIN=transmission
-        - FG_WEBUI_USER=flexget
-        - FG_WEBUI_PASSWD=Raspberry1986!
-        - PUID=1000
-        - PGID=1000
-        - TZ=America/Mexico_City
-        - DOCKER_MODS=linuxserver/mods:universal-package-install
-        - INSTALL_PACKAGES=rsync ffmpeg mediainfo
-      restart: unless-stopped
-      depends_on:
-        - transmission
+  flexget:
+    image: lscr.io/linuxserver/flexget:version-v3.18.16
+    container_name: flexget
+    volumes:
+      - ./flexget:/config
+      - ${MEDIA_MOUNTING_POINT}/torrents/complete:/downloads
+      - ${MEDIA_MOUNTING_POINT}/plex-media:/storage
+    ports:
+      - 5050:5050
+    environment:
+      - TORRENT_PLUGIN=transmission
+      - FG_WEBUI_USER=flexget
+      - FG_WEBUI_PASSWD=Raspberry1986!
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Mexico_City
+      - DOCKER_MODS=linuxserver/mods:universal-package-install
+      - INSTALL_PACKAGES=rsync ffmpeg mediainfo
+    restart: unless-stopped
+    depends_on:
+      - transmission
 
 
   homer:
