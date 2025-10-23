@@ -93,18 +93,19 @@ services:
       - transmission
     command: >
       bash -c "
-        if [ ! -f /config/.ffmpeg_installed ]; then
+        if [ ! -f /config/.deps_installed ]; then
           apt-get update -y &&
-          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ffmpeg mediainfo &&
+          DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ffmpeg mediainfo rsync &&
           apt-get clean &&
           rm -rf /var/lib/apt/lists/* &&
-          touch /config/.ffmpeg_installed;
+          touch /config/.deps_installed;
         fi;
         mkdir -p /config/.flexget;
         ln -sf /config/config.yml /config/.flexget/config.yml;
         flexget daemon start --autoreload-config;
         tail -f /dev/null
       "
+
 
   homer:
     image: b4bz/homer
