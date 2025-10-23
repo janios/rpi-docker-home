@@ -217,12 +217,12 @@ services:
       - ./tailscale/state:/var/lib/tailscale
       - /dev/net/tun:/dev/net/tun
 
-    wol:
-      image: ghcr.io/baspar/wol-web:latest
-      container_name: wol
-      restart: unless-stopped
-      network_mode: "host"
-      environment:
-        - TZ=America/Mexico_City
-      volumes:
-        - ./wol/config:/app/config
+  wol:
+    image: ghcr.io/baspar/wol-web:latest
+    container_name: wol
+    restart: unless-stopped
+    network_mode: "host"
+    environment:
+      - TZ=America/Mexico_City
+    volumes:
+      - ./wol/config:/app/config
