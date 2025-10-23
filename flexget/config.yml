@@ -52,7 +52,9 @@ tasks:
       on_output:
         for_entries: >
           mkdir -p "/storage/pelis/{{ movie_name }} ({{ movie_year }})" &&
-          rsync -avh --remove-source-files "{{ location }}" "/storage/pelis/{{ movie_name }} ({{ movie_year }})/"
+          rsync -avh --remove-source-files "{{ location }}" \
+          "/storage/pelis/{{ movie_name }} ({{ movie_year }})/{{ movie_name }} ({{ movie_year }}){{ location | pathext }}" &&
+          find /downloads -type d -empty -delete
 
 
   remove_finished_torrents:
