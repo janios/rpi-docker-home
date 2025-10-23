@@ -38,6 +38,8 @@ tasks:
   sort_movies:
     priority: 1
     no_entries_ok: yes
+    parsing:
+      movie: guessit          # 👈 importante: activa el parser de películas
     filesystem:
       path: /downloads/
       regexp: '.*\.(avi|mkv|mp4)$'
@@ -50,7 +52,8 @@ tasks:
       on_output:
         for_entries: >
           mkdir -p "/storage/pelis/{{ movie_name }} ({{ movie_year }})" &&
-          rsync -a --remove-source-files "{{ location }}" "/storage/pelis/{{ movie_name }} ({{ movie_year }})/"
+          rsync -avh --remove-source-files "{{ location }}" "/storage/pelis/{{ movie_name }} ({{ movie_year }})/"
+
 
   remove_finished_torrents:
     from_transmission:
