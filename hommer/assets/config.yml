@@ -138,7 +138,7 @@ services:
         subtitle: "Wake on Lan"
         tag: "wake_on_lan"
         keywords: "wake on lan"
-        url: "http://raspberry-flexget.tail85d034.ts.net:5000/wake/PC-Janios
+        url: "http://raspberry-flexget.tail85d034.ts.net:5000/wake/PC-Janios"
         target: "_blank" # optional html a tag target attribute
       - name: "Pi Hole"
         logo: "assets/icons/pihole.png"
