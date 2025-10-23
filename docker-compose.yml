@@ -198,7 +198,7 @@ services:
     restart: unless-stopped
 
   pihole:
-    image: pihole/pihole:2025.08.0
+    image: pihole/pihole:v5.18.4
     container_name: pihole
     network_mode: "host"
     environment:
