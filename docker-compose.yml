@@ -88,20 +88,19 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/Mexico_City
+      - DOCKER_MODS=linuxserver/mods:universal-package-install
+      - INSTALL_PACKAGES=rsync ffmpeg mediainfo
     restart: unless-stopped
     depends_on:
       - transmission
     command: >
       sh -lc "
-        if [ ! -f /config/.deps_installed ]; then
-          apk add --no-cache ffmpeg mediainfo rsync &&
-          touch /config/.deps_installed;
-        fi;
         mkdir -p /config/.flexget;
         ln -sf /config/config.yml /config/.flexget/config.yml;
         flexget daemon start --autoreload-config;
         tail -f /dev/null
       "
+
 
 
 
