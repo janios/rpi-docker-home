@@ -1,0 +1,5 @@
+servers:
+  - name: "PC-Janios"
+    mac: "10:ff:e0:b1:75:ba"    
+    broadcast: "192.168.3.255"  
+    port: 9                     
