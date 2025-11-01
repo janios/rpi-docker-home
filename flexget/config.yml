@@ -26,8 +26,7 @@ tasks:
         for_entries: >
           if mediainfo "{{ location }}" | grep -q EAC3; then
             mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" &&
-            ffmpeg -hwaccel auto -y -i "{{ location }}" -map 0 -c:s copy -c:v copy -c:a ac3 -b:a 640k \
-            "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}" &&
+            ffmpeg -hwaccel auto -y -i "{{ location }}" -map 0 -c:s copy -c:v copy -c:a ac3 -b:a 640k "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}/{{ tvdb_series_name }} - {{ series_id }}{{ location | pathext }}" &&
             rm -f "{{ location }}";
           else
             mkdir -p "/storage/series/{{ tvdb_series_name }}/Season {{ series_season }}" &&
@@ -39,7 +38,7 @@ tasks:
     priority: 1
     no_entries_ok: yes
     parsing:
-      movie: guessit          # 👈 importante: activa el parser de películas
+      movie: guessit
     filesystem:
       path: /downloads/
       regexp: '.*\.(avi|mkv|mp4)$'
@@ -47,14 +46,11 @@ tasks:
     accept_all: yes
     require_field: movie_name
     tmdb_lookup: yes
-    exec:
-      auto_escape: yes
-      on_output:
-        for_entries: >
-          mkdir -p "/storage/pelis/{{ movie_name }} ({{ movie_year }})" &&
-          rsync -avh --remove-source-files "{{ location }}" \
-          "/storage/pelis/{{ movie_name }} ({{ movie_year }})/{{ movie_name }} ({{ movie_year }}){{ location | pathext }}" &&
-          find /downloads -type d -empty -delete
+    move:
+      to: "/storage/pelis/{{ movie_name }} ({{ movie_year }})"
+      rename: "{{ movie_name }} ({{ movie_year }}){{ location | pathext }}"
+      clean_source: 100
+
 
 
   remove_finished_torrents:
