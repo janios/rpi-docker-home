@@ -1,6 +1,10 @@
-version: "3"
+version: "3.9"
 
+##########################
+# 📦 INFRAESTRUCTURA BASE
+##########################
 services:
+
   samba:
     image: dockurr/samba:4.19.5
     container_name: samba
@@ -9,16 +13,181 @@ services:
       - TZ=America/Mexico_City
       - USER=${SAMBA_USER}
       - PASS=${SAMBA_PASS}
-      - UID=1000    
-      - GID=1000    
+      - UID=1000
+      - GID=1000
       - RW=true
     ports:
       - 445:445
     volumes:
       - ${MEDIA_MOUNTING_POINT}:/storage
 
+  portainer:
+    image: portainer/portainer-ce:2.30.1
+    container_name: portainer
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${MEDIA_MOUNTING_POINT}/portainer_data:/data
+    ports:
+      - 9000:9000
+
+  filebrowser:
+    image: hurlenko/filebrowser:v2.44.0
+    container_name: filebrowser
+    environment:
+      - UID=1000
+      - GID=1000
+      - TZ=America/Mexico_City
+      - FB_BASEURL=/filebrowser
+    ports:
+      - 8081:8080
+    volumes:
+      - ${MEDIA_MOUNTING_POINT}:/data
+      - ${MEDIA_MOUNTING_POINT}/fb-config:/config
+    restart: unless-stopped
+
+  homer:
+    image: b4bz/homer:v25.10.1
+    container_name: homer
+    volumes:
+      - ./homer/assets:/www/assets
+    ports:
+      - 80:8080
+    environment:
+      - UID=1001
+      - GID=1001
+    restart: unless-stopped
+
+  dash:
+    image: mauricenino/dashdot:4.8.5
+    container_name: dash
+    privileged: true
+    restart: unless-stopped
+    ports:
+      - 8083:3001
+    volumes:
+      - /:/mnt/host:ro
+    environment:
+      - DASHDOT_ENABLE_CPU_TEMPS=true
+      - DASHDOT_ALWAYS_SHOW_PERCENTAGES=true
+
+##########################
+# 🧠 RED Y ACCESO REMOTO
+##########################
+
+  tailscale:
+    image: tailscale/tailscale:v1.88.4
+    container_name: tailscale
+    hostname: raspberry-flexget
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    environment:
+      - TS_AUTHKEY=${TAILSCALE_AUTHKEY}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_EXTRA_ARGS=--advertise-exit-node
+      - TS_ACCEPT_DNS=true
+    volumes:
+      - ./tailscale/state:/var/lib/tailscale
+      - /dev/net/tun:/dev/net/tun
+
+  pihole:
+    image: pihole/pihole:2024.03.0
+    container_name: pihole
+    network_mode: host
+    environment:
+      TZ: America/Mexico_City
+      WEBPASSWORD: ${PI_HOLE_PASS}
+      WEB_PORT: 81
+      FTLCONF_dns_listeningMode: all
+    volumes:
+      - ./etc-pihole:/etc/pihole
+      - ./etc-dnsmasq.d:/etc/dnsmasq.d
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+
+  duckdns:
+    image: lscr.io/linuxserver/duckdns:95e5988b-ls68
+    container_name: duckdns
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Mexico_City
+      - SUBDOMAINS=${DUCKDNS_SUBDOMAINS}
+      - TOKEN=${DUCKDNS_TOKEN}
+    restart: unless-stopped
+
+##########################
+# 🎬 SERVICIOS MULTIMEDIA
+##########################
+
+  jellyfin:
+    image: jellyfin/jellyfin:10.11.1
+    container_name: jellyfin
+    network_mode: host
+    environment:
+      - TZ=America/Mexico_City
+    volumes:
+      - ${MEDIA_MOUNTING_POINT}/jellyfin/config:/config
+      - ${MEDIA_MOUNTING_POINT}/jellyfin/cache:/cache
+      - ${MEDIA_MOUNTING_POINT}/plex-media:/media
+    restart: always
+
+  jellyseerr:
+    image: fallenbagel/jellyseerr:2.7.3
+    container_name: jellyseerr
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=America/Mexico_City
+      - PORT=5055
+    ports:
+      - 5055:5055
+    volumes:
+      - ./jellyseerr_config:/app/config
+    restart: unless-stopped
+    depends_on:
+      - jellyfin
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    ports:
+      - 6767:6767
+    volumes:
+      - ${MEDIA_MOUNTING_POINT}/bazarr/config:/config
+      - ${MEDIA_MOUNTING_POINT}/plex-media:/media
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Mexico_City
+    restart: unless-stopped
+
+##########################
+# 📡 DESCARGAS AUTOMÁTICAS
+##########################
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:5.1.2-r3-ls422
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Mexico_City
+      - WEBUI_PORT=5080
+    volumes:
+      - ./qbittorrent_config:/config
+      - ${MEDIA_MOUNTING_POINT}/torrents:/downloads
+      - ${MEDIA_MOUNTING_POINT}/plex-media/movies:/movies
+      - ${MEDIA_MOUNTING_POINT}/plex-media/tvshows:/tv
+    ports:
+      - 5080:5080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
+
   transmission:
-    image: lscr.io/linuxserver/transmission:4.0.6
+    image: lscr.io/linuxserver/transmission:4.0.6-r4-ls312
     container_name: transmission
     environment:
       - PUID=1000
@@ -33,45 +202,58 @@ services:
       - 51413:51413/udp
     restart: unless-stopped
 
-
-  jdownloader:
-    image: jaymoulin/jdownloader:2.1.0-armhf
-    container_name: jdownloader
-    restart: always
-    user: 1000:100
-    volumes:
-        - ${MEDIA_MOUNTING_POINT}/jdownloader/cfg:/opt/JDownloader/app/cfg
-        - ${MEDIA_MOUNTING_POINT}/jdownloader:/opt/JDownloader/Downloads
-        - ${MEDIA_MOUNTING_POINT}/jdownloader/logs:/opt/JDownloader/logs
-    environment: 
-            MYJD_USER: ${JDOWNLOADER_PASS}
-            MYJD_PASSWORD: ${JDOWNLOADER_USER}
-            MYJD_DEVICE_NAME: jdownloader_rpi_docker
-            XDG_DOWNLOAD_DIR: /opt/JDownloader/Downloads
-    ports:
-        - 3129:3129
-
-  portainer:
-    image: portainer/portainer-ce
-    container_name: portainer
-    restart: always
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ${MEDIA_MOUNTING_POINT}/portainer_data_redo:/data
-    ports:
-      - 9000:9000
-
-  jellyfin:
-    image: jellyfin/jellyfin:latest
-    container_name: jellyfin
-    network_mode: "host"
+  radarr:
+    image: lscr.io/linuxserver/radarr:5.28.0.10274-ls286
+    container_name: radarr
     environment:
+      - PUID=1000
+      - PGID=1000
       - TZ=America/Mexico_City
     volumes:
-      - ${MEDIA_MOUNTING_POINT}/jellyfin/config:/config
-      - ${MEDIA_MOUNTING_POINT}/jellyfin/cache:/cache
-      - ${MEDIA_MOUNTING_POINT}/plex-media:/media
-    restart: always
+      - ./radarr_config:/config
+      - ${MEDIA_MOUNTING_POINT}/plex-media/movies:/movies
+      - ${MEDIA_MOUNTING_POINT}/torrents:/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+    depends_on:
+      - qbittorrent
+      - transmission
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:4.0.15.2941-ls296
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Mexico_City
+    volumes:
+      - ./sonarr_config:/config
+      - ${MEDIA_MOUNTING_POINT}/plex-media/tvshows:/tv
+      - ${MEDIA_MOUNTING_POINT}/torrents:/downloads
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+    depends_on:
+      - qbittorrent
+      - transmission
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:2.1.5.5216-ls131
+    container_name: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Mexico_City
+    volumes:
+      - ./prowlarr_config:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+
+##########################
+# 🤖 AUTOMATIZACIÓN EXTRA
+##########################
 
   flexget:
     image: lscr.io/linuxserver/flexget:version-v3.18.16
@@ -92,33 +274,15 @@ services:
       - TZ=America/Mexico_City
     restart: unless-stopped
     depends_on:
+      - qbittorrent
       - transmission
 
-
-  homer:
-    image: b4bz/homer
-    #To build from source, comment previous line and uncomment below
-    #build: .
-    container_name: homer
-    volumes:
-      - ./hommer/assets/:/www/assets
-    ports:
-      - 80:8080
-    environment:
-      - UID=1001 
-      - GDI=1001  
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=public
-      - traefik.http.routers.homer-secure.entrypoints=https
-      - traefik.http.routers.homer-secure.rule=Host(`home.example.org`)
-      - traefik.http.routers.homer-secure.tls=true
-      - traefik.http.routers.homer-secure.tls.certresolver=certlocal
-      - traefik.http.services.homer.loadbalancer.server.port=8080
-    restart: unless-stopped
+##########################
+# 📊 MONITOREO SISTEMA
+##########################
 
   rpi-monitor:
-    image: michaelmiklis/rpi-monitor:latest
+    image: michaelmiklis/rpi-monitor:latest  
     container_name: rpi-monitor
     volumes:
       - /opt/vc:/opt/vc
@@ -127,112 +291,13 @@ services:
       - /etc:/dockerhost/etc:ro
       - /proc:/dockerhost/proc:ro
       - /usr/lib:/dockerhost/usr/lib:ro
-    #devices:
-    #  - "/dev/vchiq:/dev/vchiq" 
-    restart: unless-stopped
     ports:
       - 8888:8888
-
-  filebrowser:
-    image: hurlenko/filebrowser
-    container_name: filebrowser
-    environment:
-      - UID=1000
-      - GID=1000
-      - TZ=America/Mexico_City
-      - FB_BASEURL=/filebrowser
-    ports:
-      - "8081:8080"
-    volumes:
-      - ${MEDIA_MOUNTING_POINT}:/data
-      - ${MEDIA_MOUNTING_POINT}/fb-config:/config
-    restart: unless-stopped
-  
-  dash:
-    image: mauricenino/dashdot:latest
-    container_name: dash
-    restart: unless-stopped
-    privileged: true
-    ports:
-      - '8083:3001'
-    volumes:
-      - /:/mnt/host:ro
-    environment:
-      - DASHDOT_ENABLE_CPU_TEMPS=true
-      - DASHDOT_ALWAYS_SHOW_PERCENTAGES=true
-
-  duckdns:
-    image: lsioarmhf/duckdns:latest
-    container_name: duckdns
-    environment:
-      - PUID=1000 #optional
-      - PGID=1000 #optional
-      - TZ=America/Mexico_City
-      - SUBDOMAINS=${DUCKDNS_SUBDOMAINS}
-      - TOKEN=${DUCKDNS_TOKEN}
     restart: unless-stopped
 
-  bazarr:
-    image: lscr.io/linuxserver/bazarr:latest
-    container_name: bazarr
-    ports:
-      - 6767:6767
-    volumes:
-      - ${MEDIA_MOUNTING_POINT}/bazarr/config:/config
-      - ${MEDIA_MOUNTING_POINT}/plex-media:/media
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Mexico_City
-    restart: unless-stopped
-
-  pihole:
-    image: pihole/pihole:2024.03.0
-    container_name: pihole
-    network_mode: "host"
-    environment:
-      TZ: America/Mexico_City
-      WEBPASSWORD: ${PI_HOLE_PASS}
-      WEB_PORT: 81
-      FTLCONF_dns_listeningMode: all
-    volumes:
-      - ./etc-pihole:/etc/pihole
-      - ./etc-dnsmasq.d:/etc/dnsmasq.d
-    cap_add:
-      - NET_ADMIN
-    restart: unless-stopped
-
-
-  tailscale:
-    image: tailscale/tailscale:v1.88.4 
-    container_name: tailscale
-    hostname: raspberry-flexget
-    restart: unless-stopped
-    network_mode: "host"
-    privileged: true
-    environment:
-      - TS_AUTHKEY=${TAILSCALE_AUTHKEY}
-      - TS_STATE_DIR=/var/lib/tailscale
-      - TS_EXTRA_ARGS=--advertise-exit-node
-      - TS_ACCEPT_DNS=true
-    volumes:
-      - ./tailscale/state:/var/lib/tailscale
-      - /dev/net/tun:/dev/net/tun
-
-  wol:
-    image: alpine:3.20
-    container_name: wol
-    network_mode: "host"
-    restart: unless-stopped
-    environment:
-      - TZ=America/Mexico_City
-    volumes:
-      - ./wol/config:/app
-    command: >
-      sh -c "
-        apk add --no-cache python3 py3-pip &&
-        pip install --no-cache-dir --break-system-packages flask wakeonlan &&
-        python3 /app/wol_server.py
-      "
-
-
+##########################
+# 🧭 RED DEFAULT
+##########################
+networks:
+  default:
+    driver: bridge

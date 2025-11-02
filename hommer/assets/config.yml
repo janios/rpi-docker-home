@@ -1,17 +1,11 @@
 ---
 # Homepage configuration
-# See https://fontawesome.com/v5/search for icons options
-
-title: "Rpi dashboard Test"
+title: "Rpi Dashboard"
 subtitle: "Escamilla Mendiola"
 logo: "logo.png"
-# icon: "fas fa-skull-crossbones" # Optional icon
-
 header: true
-footer: '<p>Created with <span class="has-text-danger">❤️</span> with <a href="https://bulma.io/">bulma</a>, <a href="https://vuejs.org/">vuejs</a> & <a href="https://fontawesome.com/">font awesome</a> // Fork me on <a href="https://github.com/bastienwirtz/homer"><i class="fab fa-github-alt"></i></a></p>' # set false if you want to hide it.
-
-# Optional theme customization
 theme: default
+
 colors:
   light:
     highlight-primary: "#3367d6"
@@ -40,131 +34,139 @@ colors:
     link: "#3273dc"
     link-hover: "#ffdd57"
 
-# Optional message
 message:
-  #url: https://b4bz.io
-  style: "is-dark" # See https://bulma.io/documentation/components/message/#colors for styling options.
-  title: "Servidor Rpi !"
-  icon: "fa fa-grin"
-  content: "Servidor RPI"
+  style: "is-dark"
+  title: "Servidor Rpi"
+  icon: "fa fa-server"
+  content: "Raspberry Flexget Dashboard"
 
-# Optional navbar
-# links: [] # Allows for navbar (dark mode, layout, and search) without any links
 links:
-  - name: "Contribute"
+  - name: "GitHub"
     icon: "fab fa-github"
     url: "https://github.com/bastienwirtz/homer"
-    target: "_blank" # optional html a tag target attribute
-  - name: "Wiki"
+    target: "_blank"
+  - name: "Wikipedia"
     icon: "fas fa-book"
     url: "https://www.wikipedia.org/"
-  # this will link to a second homer page that will load config from additional-page.yml and keep default config values as in config.yml file
-  # see url field and assets/additional-page.yml.dist used in this example:
-  #- name: "another page!"
-  #  icon: "fas fa-file-alt"
-  #  url: "#additional-page" 
 
-# Services
-# First level array represent a group.
-# Leave only a "items" key if not using group (group name, icon & tagstyle are optional, section separation will not be displayed).
+##############################
+# 🔧 SECCIONES Y SERVICIOS
+##############################
+
 services:
+
   - name: "Monitoreo"
     icon: "fa-solid fa-screwdriver-wrench"
     items:
       - name: "Portainer"
         logo: "assets/icons/portainer.png"
-        subtitle: "docker config"
-        tag: "portainer"
-        keywords: "portainer"
+        subtitle: "Docker manager"
         url: "http://raspberry-flexget.tail85d034.ts.net:9000"
-        target: "_blank" # optional html a tag target attribute
-      - name: "rpi-monitoring"
+        target: "_blank"
+      - name: "Rpi Monitor"
         logo: "assets/icons/rpi-monitor.png"
-        subtitle: "Rpi-monitoring"
-        tag: "rpi_monitoring"
+        subtitle: "Hardware metrics"
         url: "http://raspberry-flexget.tail85d034.ts.net:8888"
-      - name: "dash"
+        target: "_blank"
+      - name: "Dashdot"
         logo: "assets/icons/dash.png"
-        subtitle: "dash_dot"
-        tag: "dash_dot"
+        subtitle: "System dashboard"
         url: "http://raspberry-flexget.tail85d034.ts.net:8083"
-  - name: "Servicios"
-    icon: "fas fa-cloud"
+        target: "_blank"
+
+  - name: "Descargas"
+    icon: "fas fa-download"
+    items:
+      - name: "qBittorrent"
+        logo: "assets/icons/qbittorrent.png"
+        subtitle: "Cliente Torrent"
+        url: "http://raspberry-flexget.tail85d034.ts.net:5080"
+        target: "_blank"
+      - name: "Transmission"
+        logo: "assets/icons/transmission.png"
+        subtitle: "Descargas Transmission"
+        url: "http://raspberry-flexget.tail85d034.ts.net:9091"
+        target: "_blank"
+      - name: "FlexGet"
+        logo: "assets/icons/flexget.png"
+        subtitle: "Automatización"
+        url: "http://raspberry-flexget.tail85d034.ts.net:5050"
+        target: "_blank"
+      - name: "Radarr"
+        logo: "assets/icons/radarr.png"
+        subtitle: "Películas automáticas"
+        url: "http://raspberry-flexget.tail85d034.ts.net:7878"
+        target: "_blank"
+      - name: "Sonarr"
+        logo: "assets/icons/sonarr.png"
+        subtitle: "Series automáticas"
+        url: "http://raspberry-flexget.tail85d034.ts.net:8989"
+        target: "_blank"
+      - name: "Prowlarr"
+        logo: "assets/icons/prowlarr.png"
+        subtitle: "Trackers y buscadores"
+        url: "http://raspberry-flexget.tail85d034.ts.net:9696"
+        target: "_blank"
+      - name: "Bazarr"
+        logo: "assets/icons/bazarr.png"
+        subtitle: "Subtítulos"
+        url: "http://raspberry-flexget.tail85d034.ts.net:6767"
+        target: "_blank"
+
+  - name: "Multimedia"
+    icon: "fas fa-film"
     items:
       - name: "Jellyfin"
         logo: "assets/icons/jellyfin.png"
-        subtitle: "Jellyfin service"
-        tag: "Jellyfin"
-        keywords: "Jellyfin"
-        url: "http://raspberry-flexget.tail85d034.ts.net:8096/web/#/home.html"
-        target: "_blank" # optional html a tag target attribute
-      - name: "Transmission"
-        logo: "assets/icons/transmission.png"
-        subtitle: "transmission"
-        tag: "transmission"
-        keywords: "transmission"
-        url: "http://raspberry-flexget.tail85d034.ts.net:9091"
-        target: "_blank" # optional html a tag target attribute 
+        subtitle: "Servidor multimedia"
+        url: "http://raspberry-flexget.tail85d034.ts.net:8096"
+        target: "_blank"
+      - name: "Jellyseerr"
+        logo: "assets/icons/jellyseerr.png"
+        subtitle: "Solicitudes multimedia"
+        url: "http://raspberry-flexget.tail85d034.ts.net:5055"
+        target: "_blank"
       - name: "FileBrowser"
         logo: "assets/icons/filebrowser.png"
-        subtitle: "File Browser"
-        tag: "File Browser"
-        keywords: "file browser"
+        subtitle: "Explorador de archivos"
         url: "http://raspberry-flexget.tail85d034.ts.net:8081"
-        target: "_blank" # optional html a tag target attribute
-      - name: "Home Assistant"
-        logo: "assets/icons/homeassistant.png"
-        subtitle: "Home Assistant"
-        tag: "Hole Assistant"
-        keywords: "Home Assistant"
-        url: "http://192.168.3.31:8123"
-        target: "_blank" # optional html a tag target attribute
-      - name: "Bazzar"
-        logo: "assets/icons/bazarr.png"
-        subtitle: "Bazzar"
-        tag: "Bazzar"
-        keywords: "Bazzar"
-        url: "http://raspberry-flexget.tail85d034.ts.net:6767"
-        target: "_blank" # optional html a tag target attribute
-      - name: "Flexget"
-        logo: "assets/icons/flexget.png"
-        subtitle: "Flexget"
-        tag: "flexget"
-        keywords: "flexget"
-        url: "http://raspberry-flexget.tail85d034.ts.net:5050"
-        target: "_blank" # optional html a tag target attribute
-      - name: "Wake on Lan"
-        logo: "assets/icons/wake-on-lan.png"
-        subtitle: "Wake on Lan"
-        tag: "wake_on_lan"
-        keywords: "wake on lan"
-        url: "http://raspberry-flexget.tail85d034.ts.net:5000/wake/PC-Janios"
-        target: "_blank" # optional html a tag target attribute
-      - name: "Pi Hole"
+        target: "_blank"
+
+  - name: "Infraestructura"
+    icon: "fas fa-network-wired"
+    items:
+      - name: "Pi-hole"
         logo: "assets/icons/pihole.png"
-        subtitle: "Pi Hole"
-        tag: "Pi Hole"
-        keywords: "Pi Hole"
+        subtitle: "DNS filtrado"
         url: "http://raspberry-flexget.tail85d034.ts.net:81/admin"
-        target: "_blank" # optional html a tag target attribute
-        apikey: 75622e30551f38d28f899a9b2ed9b8ab012af8714f384d73697828f734b478df
+        target: "_blank"
+        apikey: "75622e30551f38d28f899a9b2ed9b8ab012af8714f384d73697828f734b478df"
         type: "PiHole"
+      - name: "DuckDNS"
+        logo: "assets/icons/duckdns.png"
+        subtitle: "Dynamic DNS"
+        url: "https://www.duckdns.org/"
+        target: "_blank"
+      - name: "Samba"
+        logo: "assets/icons/samba.png"
+        subtitle: "Compartición de red"
+        url: "smb://raspberry-flexget/"
+        target: "_blank"
+
   - name: "Clima"
     icon: "fas fa-cloud"
     items:
-      - name: "Clima"
-        location: "Toluca, MX" # your location.
-        locationId: "3515302" # Optional: Specify OpenWeatherMap city ID for better accuracy
-        apikey: "dcaa0a167e162a30d7f8c76c5736a672" # insert your own API key here. Request one from https://openweathermap.org/api.
-        units: "metric" # units to display temperature. Can be one of: metric, imperial, kelvin. Defaults to kelvin.
-        background: "circle" # choose which type of background you want behind the image. Can be one of: square, circle, none. Defaults to none.
-        type: "OpenWeather"      
-      - name: "Clima Zacatñam"
-        location: "Zacatlan, MX" # your location.
-        locationId: "3514148" # Optional: Specify OpenWeatherMap city ID for better accuracy
-        apikey: "dcaa0a167e162a30d7f8c76c5736a672" # insert your own API key here. Request one from https://openweathermap.org/api.
-        units: "metric" # units to display temperature. Can be one of: metric, imperial, kelvin. Defaults to kelvin.
-        background: "circle" # choose which type of background you want behind the image. Can be one of: square, circle, none. Defaults to none.
-        type: "OpenWeather"      
-
-        
+      - name: "Toluca"
+        location: "Toluca, MX"
+        locationId: "3515302"
+        apikey: "dcaa0a167e162a30d7f8c76c5736a672"
+        units: "metric"
+        background: "circle"
+        type: "OpenWeather"
+      - name: "Zacatlán"
+        location: "Zacatlan, MX"
+        locationId: "3514148"
+        apikey: "dcaa0a167e162a30d7f8c76c5736a672"
+        units: "metric"
+        background: "circle"
+        type: "OpenWeather"
