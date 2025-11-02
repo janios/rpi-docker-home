@@ -18,7 +18,7 @@ services:
       - ${MEDIA_MOUNTING_POINT}:/storage
 
   transmission:
-    image: lscr.io/linuxserver/transmission:latest
+    image: lscr.io/linuxserver/transmission:4.0.6
     container_name: transmission
     environment:
       - PUID=1000
