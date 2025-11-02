@@ -2,7 +2,7 @@
 # Homepage configuration
 # See https://fontawesome.com/v5/search for icons options
 
-title: "Demo dashboard"
+title: "Demo dashboard" 
 subtitle: "Homer"
 logo: "logo.png"
 # icon: "fas fa-skull-crossbones" # Optional icon

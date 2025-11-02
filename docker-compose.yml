@@ -18,9 +18,12 @@ services:
       - ${MEDIA_MOUNTING_POINT}:/storage
 
   transmission:
-    image : jaymoulin/transmission:3.00-1.6.1
+    image: lscr.io/linuxserver/transmission:4.0.6
     container_name: transmission
-    command: transmission-daemon -f -g /config
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Mexico_City
     volumes:
       - ./transmission_config:/config
       - ${MEDIA_MOUNTING_POINT}/torrents:/downloads
@@ -28,9 +31,8 @@ services:
       - 9091:9091
       - 51413:51413
       - 51413:51413/udp
-    expose:
-      - 9091
     restart: unless-stopped
+
 
   jdownloader:
     image: jaymoulin/jdownloader:2.1.0-armhf
@@ -72,21 +74,26 @@ services:
     restart: always
 
   flexget:
-    image: wiserain/flexget:3.5
+    image: lscr.io/linuxserver/flexget:version-v3.18.16
     container_name: flexget
     volumes:
       - ./flexget:/config
+      - ./flexget/custom-cont-init.d:/custom-cont-init.d
       - ${MEDIA_MOUNTING_POINT}/torrents/complete:/downloads
       - ${MEDIA_MOUNTING_POINT}/plex-media:/storage
-      - ./flexget/custom-cont-init.d:/custom-cont-init.d
     ports:
       - 5050:5050
     environment:
       - TORRENT_PLUGIN=transmission
-      - FG_WEBUI_PASSWD=raspberry1981!
+      - FG_WEBUI_USER=flexget
+      - FG_WEBUI_PASSWD=Raspberry1986!
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Mexico_City
     restart: unless-stopped
-    links:
+    depends_on:
       - transmission
+
 
   homer:
     image: b4bz/homer
@@ -180,24 +187,52 @@ services:
     restart: unless-stopped
 
   pihole:
+    image: pihole/pihole:2024.03.0
     container_name: pihole
-    image: pihole/pihole:latest
-    # For DHCP it is recommended to remove these ports and instead add: 
     network_mode: "host"
-    #ports:
-      #- "53:53/tcp"
-      #- "53:53/udp"
-      #- "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
-      #- "81:80/tcp"
     environment:
       TZ: America/Mexico_City
       WEBPASSWORD: ${PI_HOLE_PASS}
       WEB_PORT: 81
-    # Volumes store your data between container upgrades
+      FTLCONF_dns_listeningMode: all
     volumes:
-      - './etc-pihole:/etc/pihole'
-      - './etc-dnsmasq.d:/etc/dnsmasq.d'
-    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+      - ./etc-pihole:/etc/pihole
+      - ./etc-dnsmasq.d:/etc/dnsmasq.d
     cap_add:
-      - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+      - NET_ADMIN
     restart: unless-stopped
+
+
+  tailscale:
+    image: tailscale/tailscale:v1.88.4 
+    container_name: tailscale
+    hostname: raspberry-flexget
+    restart: unless-stopped
+    network_mode: "host"
+    privileged: true
+    environment:
+      - TS_AUTHKEY=${TAILSCALE_AUTHKEY}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_EXTRA_ARGS=--advertise-exit-node
+      - TS_ACCEPT_DNS=true
+    volumes:
+      - ./tailscale/state:/var/lib/tailscale
+      - /dev/net/tun:/dev/net/tun
+
+  wol:
+    image: alpine:3.20
+    container_name: wol
+    network_mode: "host"
+    restart: unless-stopped
+    environment:
+      - TZ=America/Mexico_City
+    volumes:
+      - ./wol/config:/app
+    command: >
+      sh -c "
+        apk add --no-cache python3 py3-pip &&
+        pip install --no-cache-dir --break-system-packages flask wakeonlan &&
+        python3 /app/wol_server.py
+      "
+
+
